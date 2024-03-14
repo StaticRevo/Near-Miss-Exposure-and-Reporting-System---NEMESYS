@@ -1,0 +1,62 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log a Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+</head>
+<body class="bg-gray-900 text-white">
+
+    <header class="flex justify-between items-center py-4 bg-gray-800 text-center text-sm px-8">
+        <a asp-controller="Home" asp-action="Index" class="text-2xl font-bold hover:text-gray-300">Nemesys</a>
+        <div>
+            <button class="bg-transparent text-gray-400 mr-2 text-lg">My Reports</button>
+            <a asp-controller="Home" asp-action="LogReport" class="bg-transparent text-gray-400 mr-2 text-lg">Log Report</a>
+            <i class="fas fa-search text-gray-400"></i>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-2 pb-24">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12">Log a report</h2>
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">Report Information</h3>
+                <p class="text-gray-400 text-sm mb-3">
+                    We could copy the text box from the UI project here? (With less features)
+                </p>
+                <textarea class="w-full p-4 bg-gray-800 text-white rounded border border-gray-700" rows="6" placeholder="Describe the issue..."></textarea>
+            </div>
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">Upload Images</h3>
+                <label class="w-full flex flex-col items-center px-4 py-6 bg-gray-800 text-white rounded-lg border border-gray-700 cursor-pointer">
+                    <i class="fas fa-upload fa-3x"></i>
+                    <span class="mt-2">Attach images</span>
+                    <input type='file' class="hidden" />
+                </label>
+            </div>
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">Report Parameters</h3>
+                <p class="text-gray-400 text-sm mb-3">
+                    Form here with set fields.
+                </p>
+                <!-- Add your form fields here -->
+            </div>
+            <div class="flex justify-center">
+                <button class="bg-gray-700 text-white py-2 px-8 rounded">Submit Report</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="fixed bottom-0 left-0 w-full py-4 bg-gray-800 text-center text-sm px-8">
+        <span class="float-left mr-4 text-base">Nemesys</span>
+        <span class="float-middle mr-4 text-lg">Copyright Nemesys Inc.</span>
+        <span class="float-right mr-4 underline text-base">Support</span>
+    </footer>
+</body>
+</html>
