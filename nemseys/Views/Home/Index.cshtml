@@ -1,6 +1,7 @@
-﻿@{
-    Layout = null;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,24 +9,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="/css/site.css"/>
+    <link rel="stylesheet" href="/css/site.css" />
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="bg-gray-900 text-white">
 
-    <header class="flex justify-between items-center py-4 bg-gray-800 text-center text-sm px-8">
-        <h1 class="text-2xl font-bold">Nemesys</h1>
-        <div>
-            <a href="@Url.Action("Index", "Report")" class="bg-transparent text-gray-400 mr-2 text-lg">My Reports</a>
-            <a asp-controller="Home" asp-action="LogReport" class="bg-transparent text-gray-400 mr-2 text-lg">Log Report</a>
-            <i class="fas fa-search text-gray-400"></i>
-        </div>
-    </header>
-
     <div class="container mx-auto px-4 py-2 pb-24">
         <section>
-            <h2 class="text-3xl font-bold mb-6">Reports</h2>
+            <h2 class="text-4xl font-bold mb-6 text-center">Reports</h2>
 
             <!-- Report Card -->
             <div class="mb-4 flex rounded shadow-lg bg-gray-800 overflow-hidden" style="max-width: 85vw;">
@@ -47,7 +39,7 @@
                     </div>
                     <div class="flex">
                         <button class="bg-gray-700 text-gray-300 py-2 px-4 mr-2 rounded">Open Report</button>
-                        <button class="bg-gray-700 text-gray-300 py-2 px-4 rounded">Give Feedback</button>
+                        <button class="bg-gray-700 text-gray-300 py-2 px-4 rounded">Give Feedback</button> <!-- Only if reporter-->
                     </div>
                 </div>
             </div>
