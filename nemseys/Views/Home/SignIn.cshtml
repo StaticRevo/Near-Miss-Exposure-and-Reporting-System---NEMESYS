@@ -1,4 +1,4 @@
-﻿@{
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -21,20 +21,27 @@
                     </label>
                     <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Email">
                 </div>
-                <div class="mb-6">
+                <div class="mb-4">
                     <label class="block text-gray-400 text-sm font-bold mb-2" for="password">
                         Password
                     </label>
                     <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="********">
                 </div>
+                <div class="mb-4">
+                    <label for="rememberMe" class="inline-flex items-center">
+                        <input type="checkbox" id="rememberMe" class="form-checkbox bg-gray-700 text-blue-500 border-none">
+                        <span class="ml-2 text-gray-400 text-sm">Remember me</span>
+                    </label>
+                </div>
                 <div class="flex items-center justify-between">
                     <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
                         Sign In
                     </button>
+                    <!-- Register option -->
+                    <a asp-controller="Home" asp-action="Register" class="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-700">Register</a>
                 </div>
             </form>
         </div>
     </div>
-
 </body>
 </html>
