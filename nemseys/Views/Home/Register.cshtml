@@ -1,0 +1,53 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white">
+
+    <div class="w-full max-w-xs mx-auto mt-10">
+        <h2 class="text-4xl font-bold mb-6 text-center">Register</h2>
+        <div class="bg-gray-800 p-8 rounded shadow-md">
+            <form action="/register" method="post">
+                <div class="mb-3">
+                    <label class="block text-gray-400 text-sm font-bold mb-2" for="Name and Surname">
+                        Name and Surname
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Name and Surname" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-400 text-sm font-bold mb-2" for="email">
+                        Email
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Email" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-400 text-sm font-bold mb-2" for="password">
+                        Password
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="Password" required>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-400 text-sm font-bold mb-2" for="confirm-password">
+                        Confirm Password
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline" id="confirm-password" type="password" placeholder="Confirm Password" required>
+                </div>
+                <div class="flex items-center justify-between">
+                    <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                        Register
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
