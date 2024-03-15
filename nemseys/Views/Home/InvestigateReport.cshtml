@@ -1,7 +1,90 @@
-﻿@{
-    ViewData["Title"] = "Report";
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Specific Report</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
 
+<body class="bg-gray-900 text-white">
+
+    <div class="container mx-auto px-4 py-2 pb-24">
+        <section>
+            <h2 class="text-4xl font-bold mb-6 text-center">Report Title</h2>
+
+            <!-- Report Information -->
+            <div class="mb-4">
+                <h3 class="text-xl font-semibold mb-2">Report Information</h3>
+                <p class="text-gray-400 text-sm mb-4">
+                    This is an example of the description attached to the report this text is literally a placeholder please do not copy this or maybe do copy it if you want some placeholder text i dont know.
+                </p>
+                <!-- Repeat the paragraph as needed -->
+            </div>
+
+            <!-- Image Section -->
+            <div class="flex mb-4">
+                <div class="w-1/2 bg-gray-800 p-4 mr-2 text-center">No Images Available.</div>
+                <div class="w-1/2 bg-gray-800 p-4">
+                    <h3 class="text-xl font-semibold mb-2">Report Parameters</h3>
+                    <form>
+                        <div class="mb-2">
+                            <label class="text-sm font-bold">Date:</label>
+                            <input type="text" class="w-full bg-gray-700 p-2 rounded text-white mb-2" placeholder="________">
+                        </div>
+                        <div class="mb-2">
+                            <label class="text-sm font-bold">People:</label>
+                            <input type="text" class="w-full bg-gray-700 p-2 rounded text-white mb-2" placeholder="________">
+                        </div>
+                        <div class="mb-2">
+                            <label class="text-sm font-bold">Other Parameters:</label>
+                            <input type="text" class="w-full bg-gray-700 p-2 rounded text-white" placeholder="________">
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Feedback Section -->
+            <div class="bg-gray-800 p-4 rounded shadow-lg mb-6">
+                <h3 class="text-xl font-semibold mb-2">Feedback Box</h3>
+                <textarea class="w-full bg-gray-700 p-2 rounded text-white" rows="4" placeholder="We could copy the text box from the UI project here? (With less features) This one will be for feedback."></textarea>
+            </div>
+
+            <!-- Investigation Action Section -->
+            <div class="bg-gray-800 p-4 rounded shadow-lg mb-6">
+                <h3 class="text-xl font-semibold mb-2">Investigation Action</h3>
+                <form>
+                    <div class="mb-4">
+                        <label class="block text-sm font-bold mb-2">Select an action:</label>
+                        <div class="mb-2">
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio bg-gray-700 text-blue-500 border-none" name="investigationAction" value="close">
+                                <span class="ml-2 text-gray-400">Close the investigation</span>
+                            </label>
+                        </div>
+                        <div class="mb-2">
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio bg-gray-700 text-blue-500 border-none" name="investigationAction" value="furtherInvestigate">
+                                <span class="ml-2 text-gray-400">Further investigate</span>
+                            </label>
+                        </div>
+                        <div class="mb-2">
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio bg-gray-700 text-blue-500 border-none" name="investigationAction" value="noActionRequired">
+                                <span class="ml-2 text-gray-400">No action required</span>
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit Action</button>
+                </form>
+            </div>
+
+        </section>
+    </div>
+
+</body>
+</html>
