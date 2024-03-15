@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Nemesis.Models;
 
@@ -27,7 +27,18 @@ public class HomeController : Controller
     {
         return View();
     }
-  
+    public IActionResult MyReports()
+    {
+        return View();
+    }
+    public IActionResult SignIn()
+    {
+        return View();
+    }
+    public IActionResult Register()
+    {
+        return View();
+    }
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
