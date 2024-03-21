@@ -1,69 +1,41 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Log Report";
 }
+<!-- Main Content -->
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h2 class="display-5 text-center mb-5 font-weight-bold">Log A Report</h2>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log a Report</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-</head>
-<body class="bg-gray-900 text-white">
+            <div class="mb-5">
+                <h3 class="h4 mb-3 font-weight-semibold">Report Information</h3>
+                <p class="text-secondary mb-3">
+                    We could copy the text box from the UI project here? (With less features)
+                </p>
+                <textarea class="form-control bg-secondary text-light" rows="6" placeholder="Describe the issue..."></textarea>
+            </div>
 
-    @section CustomHeader {
-        <a asp-controller="Home" asp-action="Index" class="text-2xl font-bold hover:text-gray-300">Nemesys</a>
-
-        <div class="flex items-center">
-            <a asp-controller="Home" asp-action="MyReports" class="bg-transparent text-gray-400 mr-2 text-lg">My Reports</a>
-            <a asp-controller="Home" asp-action="LogReport" class="bg-transparent text-blue-500 mr-2 text-lg">Log Report</a>
-
-            <!-- Profile icon with dropdown -->
-            <div class="relative ml-2">
-                <button id="profileMenuButton" class="focus:outline-none">
-                    <i class="fas fa-user-circle fa-1.5x text-lg text-gray-400 hover:text-white"></i>
-                </button>
-                <!-- Dropdown Menu -->
-                <div id="profileMenuDropdown" class="hidden absolute right-0 mt-2 py-2 w-48 bg-gray-200 rounded-md shadow-xl z-20">
-                    <a asp-controller="Home" asp-action="SignIn" class="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-700">Sign In</a>
-                    <a asp-controller="Home" asp-action="Register" class="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-700">Register</a>
+            <div class="mb-5">
+                <h3 class="h4 mb-3 font-weight-semibold">Upload Images</h3>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="customFile">
+                    <label class="custom-file-label bg-secondary text-light" for="customFile">
+                        <i class="fas fa-upload"></i> Attach images
+                    </label>
                 </div>
             </div>
 
-        </div>
-    }
-
-    <div class="container mx-auto px-4 py-2 pb-24">
-        <div class="max-w-4xl mx-auto">
-            <h2 class="text-4xl font-bold text-center mb-12">Log a report</h2>
-            <div class="mb-6">
-                <h3 class="text-xl font-semibold mb-3">Report Information</h3>
-                <p class="text-gray-400 text-sm mb-3">
-                    We could copy the text box from the UI project here? (With less features)
-                </p>
-                <textarea class="w-full p-4 bg-gray-800 text-white rounded border border-gray-700" rows="6" placeholder="Describe the issue..."></textarea>
-            </div>
-            <div class="mb-6">
-                <h3 class="text-xl font-semibold mb-3">Upload Images</h3>
-                <label class="w-full flex flex-col items-center px-4 py-6 bg-gray-800 text-white rounded-lg border border-gray-700 cursor-pointer">
-                    <i class="fas fa-upload fa-3x"></i>
-                    <span class="mt-2">Attach images</span>
-                    <input type='file' class="hidden" />
-                </label>
-            </div>
-            <div class="mb-6">
-                <h3 class="text-xl font-semibold mb-3">Report Parameters</h3>
-                <p class="text-gray-400 text-sm mb-3">
+            <div class="mb-5">
+                <h3 class="h4 mb-3 font-weight-semibold">Report Parameters</h3>
+                <p class="text-secondary mb-3">
                     Form here with set fields.
                 </p>
-                <!-- Add your form fields here -->
             </div>
-            <div class="flex justify-center mb-6">
-                <button class="bg-gray-700 text-white py-2 px-8 rounded">Submit Report</button>
+
+            <div class="d-flex justify-content-center">
+                <button class="btn btn-secondary">Submit Report</button>
             </div>
         </div>
     </div>
-</body>
-</html>
+</div>
