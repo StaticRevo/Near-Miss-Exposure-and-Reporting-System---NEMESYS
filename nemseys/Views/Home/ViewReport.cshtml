@@ -1,68 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Nemesis</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Nemesis.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-</head>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "View Report";
+}
 
-<body class="bg-gray-900 text-white flex flex-col min-h-screen">
+<div class="container px-4 py-5">
+    <section>
+        <h2 class="display-5 font-weight-bold mb-4 text-center">Report Title</h2>
 
-    <header class="flex justify-between items-center py-4 bg-gray-800 text-sm px-8">
-        @RenderSection("CustomHeader", required: false)
-        @if (!IsSectionDefined("CustomHeader"))
-        {
-            <a asp-controller="Home" asp-action="Index" class="text-2xl font-bold hover:text-gray-300">Nemesys</a>
-            <div class="flex items-center">
-                <!-- Existing navigation links -->
-                <a asp-controller="Home" asp-action="MyReports" class="text-gray-400 hover:text-white mr-4 text-lg">My Reports</a>
-                <a asp-controller="Home" asp-action="LogReport" class="text-gray-400 hover:text-white mr-4 text-lg">Log Report</a>
+        <!-- Report Information -->
+        <div class="mb-4">
+            <h3 class="h5 font-weight-semibold mb-3">Report Information</h3>
+            <p class="text-secondary mb-4">
+                This is an example of the description attached to the report this text is literally a placeholder please do not copy this or maybe do copy it if you want some placeholder text i dont know.
+            </p>
+        </div>
 
-                <!-- Profile icon with dropdown -->
-                <div class="relative ml-2">
-                    <button id="profileMenuButton" class="focus:outline-none">
-                        <i class="fas fa-user-circle fa-2x text-lg text-gray-400 hover:text-white"></i>
-                    </button>
-                    <!-- Dropdown Menu -->
-                    <div id="profileMenuDropdown" class="hidden absolute right-0 mt-2 py-2 w-48 bg-gray-200 rounded-md shadow-xl z-20">
-                        <a asp-controller="Home" asp-action="SignIn" class="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-700">Sign In</a>
-                        <a asp-controller="Home" asp-action="Register" class="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-700">Register</a>
-                        <a asp-controller="Home" asp-action="Profile" class="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-700">Profile</a>
+        <!-- Image Section -->
+        <div class="d-flex mb-4">
+            <div class="flex-fill bg-secondary p-4 mr-2 text-center">No Images Available.</div>
+            <div class="flex-fill bg-secondary p-4">
+                <h3 class="h5 font-weight-semibold mb-3">Report Parameters</h3>
+                <form>
+                    <div class="form-group mb-2">
+                        <label class="font-weight-bold">Date:</label>
+                        <input type="text" class="form-control bg-dark text-white" placeholder="________">
                     </div>
-                </div>
+                    <div class="form-group mb-2">
+                        <label class="font-weight-bold">People:</label>
+                        <input type="text" class="form-control bg-dark text-white" placeholder="________">
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-bold">Other Parameters:</label>
+                        <input type="text" class="form-control bg-dark text-white" placeholder="________">
+                    </div>
+                </form>
             </div>
-        }
-    </header>
-
-    <main class="flex-grow">
-        @RenderBody()
-    </main>
-
-
-    @RenderSection("CustomFooter", required: false)
-    @if (!IsSectionDefined("CustomFooter"))
-    {
-        <footer class="w-full py-4 bg-gray-800 text-center text-sm px-8">
-            <span class="float-left mr-4 text-base">Nemesys</span>
-            <span class="float-middle mr-4 text-lg">Copyright Nemesys Inc.</span>
-            <span class="float-right mr-4 underline text-base">Support</span>
-        </footer>
-      }
-      
-
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-
-        <script>document.getElementById('profileMenuButton').addEventListener('click', function () {
-                document.getElementById('profileMenuDropdown').classList.toggle('hidden');
-            });</script>
-
-        @await RenderSectionAsync("Scripts", required: false)
-    </body>
-</html>
-
+        </div>
+    </section>
+</div>
