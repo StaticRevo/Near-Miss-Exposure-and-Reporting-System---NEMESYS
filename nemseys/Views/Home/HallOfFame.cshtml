@@ -1,90 +1,78 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Hall Of Fame";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="container py-5 my-5">
+<div class="container py-2" style="padding-bottom: 6rem;">
     <section>
-        <h2 class="text-center display-4 font-weight-bold mb-5">Hall of Fame</h2>
-        <!-- Podium for Top 3 Reporters -->
-        <div class="d-flex justify-content-center mb-5">
-            <!-- Second Place -->
-            <div class="text-center podium second-place mr-2">
-                <h3 class="reporter-name">Johnny</h3>
-                <h4 class="report-count">350 Reports</h4>
-                <div class="rank">2</div>
-            </div>
-            <!-- First Place -->
-            <div class="text-center podium first-place mx-2">
-                <h3 class="reporter-name">Johnny</h3>
-                <h4 class="report-count">500 Reports</h4>
-                <div class="rank">1</div>
-            </div>
-            <!-- Third Place -->
-            <div class="text-center podium third-place ml-2">
-                <h3 class="reporter-name">Johnny</h3>
-                <h4 class="report-count">300 Reports</h4>
-                <div class="rank">3</div>
+        <h2 class="text-center display-5 font-weight-bold mb-6">Reports</h2>
+        <!-- Report Card -->
+        <div class="card mb-3" style="max-width: 85vw;">
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                    <img src="https://placehold.co/300x350" class="card-img" alt="Report visual placeholder">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h3 class="card-title" style="color: #141414; ">Report Title</h3>
+                        <p class="card-text text-secondary">
+                            This report presents a comprehensive overview of our recent software development project, detailing the objectives, methodologies employed, key findings, and recommendations for future work. It aims to provide stakeholders with a clear understanding of the project's scope, the challenges encountered, and the solutions implemented to overcome these obstacles.
+                        </p>
+                        <p class="card-text text-secondary">
+                            Additionally, the report includes an analysis of the project's impact on the organization's operational efficiency and suggests areas for further improvement. The insights gained from this project are intended to inform decision-making processes and guide the strategic direction of future development initiatives.
+                        </p>
+                        <div class="d-flex">
+                            <a asp-controller="Home" asp-action="ViewReport" class="btn btn-dark text-secondary py-2 px-4 mr-2">View Report</a>
+                            <a asp-controller="Home" asp-action="InvestigateReport" class="btn btn-dark text-secondary py-2 px-4">Investigate Report</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Voting controls -->
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <button type="button" class="btn">
+                            <i class="fas fa-arrow-up"></i>
+                        </button>
+                        <span class="text-dark mx-2">497</span>
+                        <button type="button" class="btn">
+                            <i class="fas fa-arrow-down"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Leaderboard List for Other Reporters -->
-        <div class="list-group">
-            @for (int i = 4; i <= 6; i++)
-            {
-                <div class="list-group-item d-flex justify-content-between align-items-center leaderboard-entry">
-                    <span class="leaderboard-rank">#{i}</span>
-                    <span class="reporter-name">Johnny Ive</span>
-                    <span class="report-count">200 reports</span>
+        <!-- Separating Line -->
+        <div class="my-4 border-top border-secondary"></div>
+
+        <!-- Report Card -->
+        <div class="card mb-3" style="max-width: 85vw;">
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                    <img src="https://placehold.co/300x350" class="card-img" alt="Report visual placeholder">
                 </div>
-            }
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h3 class="card-title" style="color: #141414; ">Report Title</h3>
+                        <p class="card-text text-secondary">
+                            This report presents a comprehensive overview of our recent software development project, detailing the objectives, methodologies employed, key findings, and recommendations for future work. It aims to provide stakeholders with a clear understanding of the project's scope, the challenges encountered, and the solutions implemented to overcome these obstacles.
+                        </p>
+                        <p class="card-text text-secondary">
+                            Additionally, the report includes an analysis of the project's impact on the organization's operational efficiency and suggests areas for further improvement. The insights gained from this project are intended to inform decision-making processes and guide the strategic direction of future development initiatives.
+                        </p>
+                        <div class="d-flex">
+                            <a asp-controller="Home" asp-action="ViewReport" class="btn btn-dark text-secondary py-2 px-4 mr-2">View Report</a>
+                            <a asp-controller="Home" asp-action="InvestigateReport" class="btn btn-dark text-secondary py-2 px-4">Investigate Report</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <!-- Separating Line -->
+        <div class="my-4 border-top border-secondary"></div>
+
     </section>
 </div>
 
-<style>
-    .podium {
-        position: relative;
-        padding: 1rem;
-        width: 100px;
-        border: 1px solid #000; 
-    }
 
-    .first-place {
-        background-color: gold;
-    }
-
-    .second-place {
-        background-color: silver;
-    }
-
-    .third-place {
-        background-color: #cd7f32; 
-    }
-
-    .podium .rank {
-        position: absolute;
-        bottom: -25px; 
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 2rem; 
-        color: #fff; 
-    }
-
-    .leaderboard-entry {
-        border-bottom: 1px solid #ddd; 
-    }
-
-    .leaderboard-rank {
-        font-weight: bold;
-    }
-
-    .reporter-name {
-        flex-grow: 1;
-        text-align: left;
-    }
-
-    .report-count {
-        text-align: right;
-    }
-</style>
