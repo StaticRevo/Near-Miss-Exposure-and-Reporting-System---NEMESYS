@@ -1,38 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>@ViewData["Title"] - Nemesis</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Nemesis.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
+<body class="bg-dark text-white d-flex flex-column min-vh-100">
 
-<body class="bg-gray-900 text-white flex flex-col min-h-screen">
-
-    <header class="flex justify-between items-center py-4 bg-gray-800 text-sm px-8">
+    <header class="d-flex justify-content-between align-items-center py-2 bg-secondary text-sm px-3">
         @RenderSection("CustomHeader", required: false)
         @if (!IsSectionDefined("CustomHeader"))
         {
-            <a asp-controller="Home" asp-action="Index" class="text-2xl font-bold hover:text-gray-300">Nemesys</a>
-            <div class="flex items-center">
-                <!-- Existing navigation links -->
-                <a asp-controller="Home" asp-action="MyReports" class="text-gray-400 hover:text-white mr-4 text-lg">My Reports</a>
-                <a asp-controller="Home" asp-action="LogReport" class="text-gray-400 hover:text-white mr-4 text-lg">Log Report</a>
+            <a asp-controller="Home" asp-action="Index" class="h2 font-weight-bold text-light text-decoration-none">Nemesys</a>
+            <div class="d-flex align-items-center">
+                <a asp-controller="Home" asp-action="MyReports" class="@(ViewContext.RouteData.Values["action"].ToString() == "MyReports" ? "active-link" : "text-light") hover:text-white mr-3">My Reports</a>
+                <a asp-controller="Home" asp-action="LogReport" class="@(ViewContext.RouteData.Values["action"].ToString() == "LogReport" ? "active-link" : "text-light") hover:text-white mr-3">Log Report</a>
+                <a asp-controller="Home" asp-action="HallOfFame" class="@(ViewContext.RouteData.Values["action"].ToString() == "HallOfFame" ? "active-link" : "text-light") hover:text-white mr-3">Hall Of Fame</a>
 
-                <!-- Profile icon with dropdown -->
-                <div class="relative ml-2">
-                    <button id="profileMenuButton" class="focus:outline-none">
-                        <i class="fas fa-user-circle fa-2x text-lg text-gray-400 hover:text-white"></i>
+                <!-- Profile Icon with Dropdown -->
+                <div class="dropdown">
+                    <button id="profileMenuButton" class="btn btn-secondary" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle fa-2x"></i>
                     </button>
-                    <!-- Dropdown Menu -->
-                    <div id="profileMenuDropdown" class="hidden absolute right-0 mt-2 py-2 w-48 bg-gray-200 rounded-md shadow-xl z-20">
-                        <a asp-controller="Home" asp-action="SignIn" class="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-700">Sign In</a>
-                        <a asp-controller="Home" asp-action="Register" class="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-700">Register</a>
-                        <a asp-controller="Home" asp-action="Profile" class="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-700">Profile</a>
-                    </div>
+                    <ul class="dropdown-menu" aria-labelledby="profileMenuButton">
+                        <li><a asp-controller="Home" asp-action="SignIn" class="dropdown-item">Sign In</a></li>
+                        <li><a asp-controller="Home" asp-action="Register" class="dropdown-item">Register</a></li>
+                        <li><a asp-controller="Home" asp-action="Profile" class="dropdown-item">Profile</a></li>
+                    </ul>
                 </div>
             </div>
         }
@@ -42,27 +41,25 @@
         @RenderBody()
     </main>
 
-
     @RenderSection("CustomFooter", required: false)
     @if (!IsSectionDefined("CustomFooter"))
     {
-        <footer class="w-full py-4 bg-gray-800 text-center text-sm px-8">
-            <span class="float-left mr-4 text-base">Nemesys</span>
-            <span class="float-middle mr-4 text-lg">Copyright Nemesys Inc.</span>
-            <span class="float-right mr-4 underline text-base">Support</span>
+        <footer class="mt-auto bg-secondary text-center text-sm px-3 py-2">
+            <div class="d-flex justify-content-between">
+                <span class="text-lg">Nemesys</span>
+                <span class="text-lg">Copyright Nemesys Inc.</span>
+                <span class="text-lg text-decoration-underline">Support</span>
+            </div>
         </footer>
-      }
-      
+    }
 
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-        <script>document.getElementById('profileMenuButton').addEventListener('click', function () {
-                document.getElementById('profileMenuDropdown').classList.toggle('hidden');
-            });</script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 
-        @await RenderSectionAsync("Scripts", required: false)
-    </body>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
 </html>
-
