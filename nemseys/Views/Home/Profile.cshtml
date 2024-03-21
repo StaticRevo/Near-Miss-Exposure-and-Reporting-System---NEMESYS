@@ -1,51 +1,58 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Profile";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>Register</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-900 text-white">
-    <div class="w-full max-w-xs mx-auto mt-10 mb-10">
-        <h2 class="text-4xl font-bold mb-6 text-center">Register</h2>
-        <div class="bg-gray-800 p-8 rounded shadow-md">
-            <form action="/register" method="post">
-                <div class="mb-3">
-                    <label class="block text-gray-400 text-sm font-bold mb-2" for="Name and Surname">
-                        Name and Surname
-                    </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Name and Surname" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-400 text-sm font-bold mb-2" for="email">
-                        Email
-                    </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Email" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-400 text-sm font-bold mb-2" for="password">
-                        Password
-                    </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="Password" required>
-                </div>
-                <div class="mb-6">
-                    <label class="block text-gray-400 text-sm font-bold mb-2" for="confirm-password">
-                        Confirm Password
-                    </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline" id="confirm-password" type="password" placeholder="Confirm Password" required>
-                </div>
-                <div class="flex items-center justify-between">
-                    <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-                        Register
-                    </button>
-                </div>
-            </form>
+<div class="container px-4 py-2">
+    <section>
+        <h2 class="display-5 font-weight-bold mb-4 text-center">Profile</h2>
+        <!-- Profile Information -->
+        <div class="card bg-secondary mb-4">
+            <div class="card-body">
+                <form>
+                    <div class="form-group">
+                        <label for="name" class="font-weight-bold">Name:</label>
+                        <input type="text" id="name" class="form-control" placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="surname" class="font-weight-bold">Surname:</label>
+                        <input type="text" id="surname" class="form-control" placeholder="Your surname">
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="font-weight-bold">Email:</label>
+                        <input type="email" id="email" class="form-control" placeholder="Your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="font-weight-bold">Password:</label>
+                        <input type="password" id="password" class="form-control" placeholder="New password (optional)">
+                    </div>
+                    <div class="form-group">
+                        <label for="profilePicture" class="font-weight-bold">Profile Picture:</label>
+                        <input type="file" id="profilePicture" class="form-control-file">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                </form>
+            </div>
         </div>
-    </div>
-</body>
-</html>
+
+        <!-- Settings Section -->
+        <div class="card bg-secondary">
+            <div class="card-body">
+                <h3 class="h2 font-weight-bold mb-3">Settings</h3>
+                <form>
+                    <!-- Example setting -->
+                    <div class="form-group">
+                        <label for="theme" class="font-weight-bold">Theme:</label>
+                        <select id="theme" class="form-control">
+                            <option>Dark</option>
+                            <option>Light</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Settings</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+
+
