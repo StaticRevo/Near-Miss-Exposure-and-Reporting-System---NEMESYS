@@ -1,47 +1,33 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Sign In";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>Sign In</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-900 text-white">
-    <div class="w-full max-w-xs mx-auto mt-20">
-        <h2 class="text-4xl font-bold mb-6 text-center">Sign In</h2>
-        <div class="bg-gray-800 p-8 rounded shadow-md">
-            <form action="/login" method="post">
-                <div class="mb-4">
-                    <label class="block text-gray-400 text-sm font-bold mb-2" for="email">
-                        Email
-                    </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Email">
+<div class="container" style="max-width: 20rem; margin-top: 5rem; margin-bottom: 5rem;">
+    <h2 class="display-5 font-weight-bold mb-4 text-center">Sign In</h2>
+    <div class="card bg-secondary p-4 shadow">
+        <form action="/login" method="post">
+            <div class="form-group mb-4">
+                <label for="email" class="font-weight-bold text-light">Email</label>
+                <input type="email" id="email" class="form-control" placeholder="Email">
+            </div>
+            <div class="form-group mb-4">
+                <label for="password" class="font-weight-bold text-light">Password</label>
+                <input type="password" id="password" class="form-control" placeholder="********">
+            </div>
+            <div class="form-group mb-4">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="rememberMe">
+                    <label class="custom-control-label text-light" for="rememberMe">Remember me</label>
                 </div>
-                <div class="mb-4">
-                    <label class="block text-gray-400 text-sm font-bold mb-2" for="password">
-                        Password
-                    </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="********">
-                </div>
-                <div class="mb-4">
-                    <label for="rememberMe" class="inline-flex items-center">
-                        <input type="checkbox" id="rememberMe" class="form-checkbox bg-gray-700 text-blue-500 border-none">
-                        <span class="ml-2 text-gray-400 text-sm">Remember me</span>
-                    </label>
-                </div>
-                <div class="flex items-center justify-between">
-                    <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-                        Sign In
-                    </button>
-                    <!-- Register option -->
-                    <a asp-controller="Home" asp-action="Register" class="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-700">Register</a>
-                </div>
-            </form>
-        </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <button type="submit" class="btn btn-success">Sign In</button>
+                <!-- Register option -->
+                <a asp-controller="Home" asp-action="Register" class="text-primary">Register</a>
+            </div>
+        </form>
     </div>
-</body>
-</html>
+</div>
+
+
