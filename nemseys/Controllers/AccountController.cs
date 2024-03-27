@@ -1,14 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Nemesis.Models; // Replace YourNamespace with the namespace of your models
+using Microsoft.AspNetCore.Mvc;
+using Nemesis.Models;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System;
+using System.Security.Cryptography;
+using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 public class AccountController : Controller
 {
-    // Assuming you have some mechanism for managing user sessions
-    // You may replace this with your actual user authentication mechanism
+    private readonly YourDbContext _context;
+
+    public AccountController(YourDbContext context)
+    {
+        _context = context;
+    }
+
     private bool IsUserAuthenticated(string username, string password)
     {
-        // This is a placeholder method for user authentication
-        // You should implement your actual authentication logic here
+        // Placeholder method for user authentication
+        // Implement your actual authentication logic here
         // For demonstration purposes, always return true
         return true;
     }
@@ -24,7 +34,7 @@ public class AccountController : Controller
     {
         if (IsUserAuthenticated(username, password))
         {
-            // If authentication succeeds, you can redirect the user to a dashboard or some other page
+            // If authentication succeeds, redirect the user to a dashboard or some other page
             // For demonstration purposes, redirecting to the home page
             return RedirectToAction("Index", "Home");
         }
@@ -37,16 +47,61 @@ public class AccountController : Controller
     }
 
     // Signup action
-    public ActionResult Signup()
-    {
-        return View();
-    }
-
     [HttpPost]
-    public ActionResult Signup(Profile profile, string username, string password)
+    public ActionResult Signup(Profile profile, string password)
     {
-        // Save profile and credentials to the database
-        // For demonstration purposes, redirecting to the login page after successful signup
+        // Hash the password
+        string hashedPassword = HashPassword(password);
+
+        // Save the profile and credentials to the database
+        SaveProfileAndCredentials(profile, profile.Email, hashedPassword);
+
+        // Redirect to the login page after successful signup
         return RedirectToAction("Login");
     }
+
+    private string HashPassword(string password)
+    {
+        // Generate a random salt
+        byte[] salt = new byte[128 / 8];
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(salt);
+        }
+
+        // Hash the password using PBKDF2 with 10000 iterations
+        string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+            password: password,
+            salt: salt,
+            prf: KeyDerivationPrf.HMACSHA1,
+            iterationCount: 10000,
+            numBytesRequested: 256 / 8));
+
+        // Combine the salt and hashed password
+        return $"{Convert.ToBase64String(salt)}:{hashed}";
+    }
+
+    private void SaveProfileAndCredentials(Profile profile, string email, string hashedPassword)
+    {
+        // Save profile to the database
+        _context.Profiles.Add(profile);
+        _context.SaveChanges();
+
+        // Split the stored string back into its salt and hashed password components
+        var parts = hashedPassword.Split(':');
+        var salt = Convert.FromBase64String(parts[0]);
+        var passwordHash = Convert.FromBase64String(parts[1]); // Convert hashed password to byte array
+
+        // Save credentials to the database
+        Credentials credentials = new Credentials
+        {
+            Username = email,
+            PasswordHash = passwordHash,
+            Salt = salt,
+            ProfileId = profile.ProfileId
+        };
+        _context.Credentials.Add(credentials);
+        _context.SaveChanges();
+    }
+
 }
