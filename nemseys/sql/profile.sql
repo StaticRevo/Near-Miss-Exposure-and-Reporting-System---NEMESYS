@@ -4,6 +4,7 @@ CREATE TABLE Profiles (
     Email NVARCHAR(100) NOT NULL UNIQUE,
     Phone NVARCHAR(20),
     ProfileType NVARCHAR(20) CHECK (ProfileType IN ('Reporter', 'Investigator'))
+    PasswordHash NVARCHAR(255) NOT NULL
 );
 
 CREATE TABLE Credentials (
