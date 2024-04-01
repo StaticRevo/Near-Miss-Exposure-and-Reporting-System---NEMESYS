@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 public class AccountController : Controller
 {
-    private readonly YourDbContext _context;
+    private readonly DataContext _context;
 
-    public AccountController(YourDbContext context)
+    public AccountController(DataContext context)
     {
         _context = context;
     }
@@ -30,13 +30,12 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    public ActionResult Login(string username, string password)
+    public ActionResult Login(string username, string password, string returnUrl)
     {
         if (IsUserAuthenticated(username, password))
         {
-            // If authentication succeeds, redirect the user to a dashboard or some other page
-            // For demonstration purposes, redirecting to the home page
-            return RedirectToAction("Index", "Home");
+            // If authentication succeeds, redirect the user to the returnUrl or default to "/home/myreports"
+            return Redirect(string.IsNullOrEmpty(returnUrl) ? "/home/myreports" : returnUrl);
         }
         else
         {
@@ -57,7 +56,7 @@ public class AccountController : Controller
         SaveProfileAndCredentials(profile, profile.Email, hashedPassword);
 
         // Redirect to the login page after successful signup
-        return RedirectToAction("Login");
+        return RedirectToAction("SignIn", "Home");
     }
 
     private string HashPassword(string password)
