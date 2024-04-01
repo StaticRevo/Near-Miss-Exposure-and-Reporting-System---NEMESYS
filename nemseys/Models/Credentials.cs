@@ -4,6 +4,6 @@ public class Credentials
     public string Username { get; set; }
     public string Password { get; set; }
     public byte[] Salt { get; set; }
-    public byte[] PasswordHash { get; set; } // Define PasswordHash property
+    public byte[] PasswordHash { get; set; }
     public int ProfileId { get; set; }
 }
