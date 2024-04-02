@@ -6,7 +6,7 @@
 <div class="container" style="max-width: 20rem; margin-top: 2.5rem; margin-bottom: 2.5rem;">
     <h2 class="display-5 text-center font-weight-bold mb-4">Register</h2>
     <div class="card bg-secondary p-4 shadow">
-        <form id="registerForm" action="/Account/Signup" method="post">
+        <form action="/register" method="post">
             <div class="form-group">
                 <label for="name-and-surname" class="text-light font-weight-bold">Name and Surname</label>
                 <input type="text" class="form-control" id="name-and-surname" name="profile.Name" placeholder="Name and Surname" required>
@@ -24,6 +24,20 @@
                 <input type="password" class="form-control" id="confirm-password" placeholder="Confirm Password" required>
             </div>
             <div class="text-danger" id="passwordMismatch" style="display:none;">Passwords do not match.</div>
+
+            <div class="form-group">
+                <div class="d-flex justify-content-around">
+                    <div>
+                        <input type="radio" id="investigator" name="role" value="investigator" required>
+                        <label for="investigator" class="text-light">Investigator</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="reporter" name="role" value="reporter" required>
+                        <label for="reporter" class="text-light">Reporter</label>
+                    </div>
+                </div>
+            </div>
+
             <div class="d-flex justify-content-between">
                 <button type="submit" class="btn btn-success" id="registerButton">Register</button>
             </div>
@@ -31,14 +45,12 @@
     </div>
 </div>
 
-<script>
-    document.getElementById("registerForm").addEventListener("submit", function(event) {
+<script>document.getElementById("registerForm").addEventListener("submit", function(event) {
         var password = document.getElementById("password").value;
         var confirmPassword = document.getElementById("confirm-password").value;
-
         if (password !== confirmPassword) {
             event.preventDefault();
             document.getElementById("passwordMismatch").style.display = "block";
         }
-    });
-</script>
+    });</script>
+
