@@ -5,27 +5,27 @@
 
 <div class="container" style="max-width: 20rem; margin-top: 5rem; margin-bottom: 5rem;">
     <h2 class="display-5 font-weight-bold mb-4 text-center">Sign In</h2>
-    <div class="card bg-secondary p-4 shadow">
+    <div class="card" style="background-color: #f8f9fa; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,.1);">
         <form action="/login" method="post">
             <div class="form-group mb-4">
-                <label for="email" class="font-weight-bold text-light">Email</label>
-                <input type="email" id="email" class="form-control" placeholder="Email">
+                <label for="email" class="font-weight-bold" style="color: #495057;">Email</label>
+                <input type="email" id="email" class="form-control" placeholder="Email" style="background-color: #ffffff; border: 1px solid #ced4da; padding: .375rem .75rem;">
             </div>
             <div class="form-group mb-4">
-                <label for="password" class="font-weight-bold text-light">Password</label>
-                <input type="password" id="password" class="form-control" placeholder="********">
+                <label for="password" class="font-weight-bold" style="color: #495057;">Password</label>
+                <input type="password" id="password" class="form-control" placeholder="********" style="background-color: #ffffff; border: 1px solid #ced4da; padding: .375rem .75rem;">
             </div>
             <div class="form-group mb-4">
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="rememberMe">
-                    <label class="custom-control-label text-light" for="rememberMe">Remember me</label>
+                    <label class="custom-control-label" for="rememberMe" style="color: #495057;">Remember me</label>
                 </div>
             </div>
             <input type="hidden" name="returnUrl" value="/home/myreports" />
             <div class="d-flex justify-content-between align-items-center">
-                <button type="submit" class="btn btn-success">Sign In</button>
+                <button type="submit" class="btn btn-success" style="padding: .5rem 1rem; font-size: 1rem;">Sign In</button>
                 <!-- Register option -->
-                <a asp-controller="Home" asp-action="Register" class="text-primary">Register</a>
+                <a asp-controller="Home" asp-action="Register" class="text-primary" style="padding: .375rem .75rem; font-size: .875rem; background-color: transparent; border: none;">Register</a>
             </div>
         </form>
     </div>
