@@ -5,6 +5,8 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
+using System.Linq;
 
 public class AccountController : Controller
 {
@@ -17,11 +19,50 @@ public class AccountController : Controller
 
     private bool IsUserAuthenticated(string username, string password)
     {
-        // Placeholder method for user authentication
-        // Implement your actual authentication logic here
-        // For demonstration purposes, always return true
-        return true;
+        Debug.WriteLine($"Authenticating user: {username}, {password}");
+
+        // Find the credentials associated with the provided username
+        var credentials = _context.Credentials.FirstOrDefault(c => c.Username == username);
+
+        if (credentials == null)
+        {
+            Debug.WriteLine($"No credentials found for user: {username}");
+            // No credentials found for the provided username
+            return false;
+        }
+
+        // Hash the provided password with the stored salt
+        byte[] hashedPasswordBytes = HashPassword(password, credentials.Salt);
+
+        // Convert the byte array to a base64 string for comparison
+        string hashedPassword = Convert.ToBase64String(hashedPasswordBytes);
+
+        // Compare the hashed password with the stored password hash
+        if (hashedPassword == Convert.ToBase64String(credentials.PasswordHash))
+        {
+            // Authentication successful
+            return true;
+        }
+
+        // Authentication failed
+        return false;
     }
+
+
+
+    private byte[] HashPassword(string password, byte[] salt)
+    {
+        // Hash the password using PBKDF2 with the stored salt and 10000 iterations
+        byte[] hashedBytes = KeyDerivation.Pbkdf2(
+            password: password,
+            salt: salt,
+            prf: KeyDerivationPrf.HMACSHA1,
+            iterationCount: 10000,
+            numBytesRequested: 256 / 8);
+
+        return hashedBytes;
+    }
+
 
     // Login action
     public ActionResult Login()
@@ -32,10 +73,21 @@ public class AccountController : Controller
     [HttpPost]
     public ActionResult Login(string username, string password, string returnUrl)
     {
+
         if (IsUserAuthenticated(username, password))
         {
-            // If authentication succeeds, redirect the user to the returnUrl or default to "/home/myreports"
-            return RedirectToAction("MyReports", "Home");
+            // If authentication succeeds, retrieve the associated Profile
+            var profile = _context.Profiles.FirstOrDefault(p => p.Credentials.Username == username);
+
+            // Redirect the user to the returnUrl or default to "/home/myreports"
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction("MyReports", "Home");
+            }
         }
         else
         {
@@ -44,6 +96,7 @@ public class AccountController : Controller
             return RedirectToAction("SignIn", "Home");
         }
     }
+
 
     // Signup action
     [HttpPost]
