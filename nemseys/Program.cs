@@ -39,10 +39,6 @@ app.Use(async (context, next) =>
     await next();
 });
 
-app.MapControllerRoute(
-    name: "signin",
-    pattern: "/signin",
-    defaults: new { controller = "Home", action = "SignIn" });
 
 app.UseEndpoints(endpoints =>
 {
@@ -50,10 +46,15 @@ app.UseEndpoints(endpoints =>
         name: "register",
         pattern: "/register",
         defaults: new { controller = "Account", action = "Signup" });
-});
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    endpoints.MapControllerRoute(
+        name: "signin",
+        pattern: "/signin",
+        defaults: new { controller = "Home", action = "SignIn" });
+
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+});
 
 app.Run();
