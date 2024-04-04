@@ -29,16 +29,33 @@ public class HomeController : Controller
     }
     public IActionResult MyReports()
     {
-        return View();
+        return View("myreports");
     }
     public IActionResult SignIn()
     {
-        return View();
+        return View("signin");
     }
     public IActionResult Register()
     {
         return View();
     }
+    public IActionResult ViewReport()
+    {
+        return View();
+    }
+    public IActionResult Profile()
+    {
+        return View();
+    }
+    public IActionResult InvestigateReport()
+    {
+        return View();
+    }
+    public IActionResult HallOfFame()
+    {
+        return View();
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
