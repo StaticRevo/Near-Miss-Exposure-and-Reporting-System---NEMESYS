@@ -41,8 +41,16 @@ app.Use(async (context, next) =>
 
 app.MapControllerRoute(
     name: "signin",
-    pattern: "signin",
+    pattern: "/signin",
     defaults: new { controller = "Home", action = "SignIn" });
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "register",
+        pattern: "/register",
+        defaults: new { controller = "Account", action = "Signup" });
+});
 
 app.MapControllerRoute(
     name: "default",
