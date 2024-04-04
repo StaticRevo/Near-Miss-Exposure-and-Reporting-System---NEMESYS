@@ -35,29 +35,44 @@ public class AccountController : Controller
         if (IsUserAuthenticated(username, password))
         {
             // If authentication succeeds, redirect the user to the returnUrl or default to "/home/myreports"
-            return Redirect(string.IsNullOrEmpty(returnUrl) ? "/home/myreports" : returnUrl);
+            return RedirectToAction("MyReports", "Home");
         }
         else
         {
             // If authentication fails, return the login view with an error message
             ModelState.AddModelError("", "Invalid username or password");
-            return View();
+            return RedirectToAction("SignIn", "Home");
         }
     }
 
     // Signup action
     [HttpPost]
-    public ActionResult Signup(Profile profile, string password)
+    public ActionResult Signup(Profile profile, string password, string role)
     {
         // Hash the password
         string hashedPassword = HashPassword(password);
 
+        // Set ProfileType based on the selected radio button value
+        if (role == "investigator")
+        {
+            profile.ProfileType = "Investigator";
+        }
+        else if (role == "reporter")
+        {
+            profile.ProfileType = "Reporter";
+        }
+        else
+        {
+            // Handle other cases if necessary
+        }
+
         // Save the profile and credentials to the database
         SaveProfileAndCredentials(profile, profile.Email, hashedPassword);
 
-        // Redirect to the login page after successful signup
+        // Redirect to the sign-in page after successful signup
         return RedirectToAction("SignIn", "Home");
     }
+
 
     private string HashPassword(string password)
     {
@@ -82,6 +97,17 @@ public class AccountController : Controller
 
     private void SaveProfileAndCredentials(Profile profile, string email, string hashedPassword)
     {
+        // Check if the email address already exists in the database
+        var existingProfile = _context.Profiles.FirstOrDefault(p => p.Email == email);
+
+        if (existingProfile != null)
+        {
+            // Handle the case where the email address already exists
+            // For example, you could return an error message or redirect the user
+            // In this example, I'm throwing an exception for demonstration purposes
+            throw new InvalidOperationException("Email address already exists");
+        }
+
         // Save profile to the database
         _context.Profiles.Add(profile);
         _context.SaveChanges();
@@ -102,5 +128,6 @@ public class AccountController : Controller
         _context.Credentials.Add(credentials);
         _context.SaveChanges();
     }
+
 
 }
