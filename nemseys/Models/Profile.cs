@@ -8,6 +8,7 @@ public class Profile
     public string Email { get; set; }
     public string Phone { get; set; }
     public string ProfileType { get; set; }
+    public byte[] ProfilePicture { get; set; }
 
     // Navigation property for Credentials
     public Credentials Credentials { get; set; }
