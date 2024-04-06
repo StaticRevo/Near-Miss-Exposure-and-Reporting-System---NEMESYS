@@ -38,6 +38,12 @@
             </div>
 
             <div class="form-group">
+                <label for="profile-picture" class="font-weight-bold" style="color: #495057;">Profile Picture</label>
+                <input type="file" class="form-control-file" id="profile-picture" name="profilePicture" onchange="previewImage(event)">
+                <img id="image-preview" src="#" alt="Profile Picture Preview" style="display: none; max-width: 100%; margin-top: 10px; border-radius: 50%; border: 2px solid #ccc; width: 150px; height: 150px;">
+            </div>
+
+            <div class="form-group">
                 <div class="d-flex justify-content-around">
                     <div>
                         <input type="radio" id="investigator" name="role" value="investigator" required>
@@ -58,14 +64,33 @@
 </div>
 
 <script>
-document.getElementById("registerForm").addEventListener("submit", function(event) {
-    var password = document.getElementById("password").value;
-    var confirmPassword = document.getElementById("confirm-password").value;
-    if (password !== confirmPassword) {
-        event.preventDefault();
-        document.getElementById("passwordMismatch").style.display = "block";
+    document.getElementById("registerForm").addEventListener("submit", function(event) {
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirm-password").value;
+        if (password !== confirmPassword) {
+            event.preventDefault();
+            document.getElementById("passwordMismatch").style.display = "block";
+        }
+    });
+
+    function previewImage(event) {
+        var input = event.target;
+        var preview = document.getElementById('image-preview');
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.style.display = null;
+            preview.src = '#';
+        }
     }
-});
 
     document.getElementById("registerForm").addEventListener("submit", function (event) {
         event.preventDefault();
