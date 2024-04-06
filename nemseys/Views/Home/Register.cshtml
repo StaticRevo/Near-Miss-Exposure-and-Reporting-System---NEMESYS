@@ -3,6 +3,13 @@
     ViewData["Title"] = "Register";
 }
 
+@if (ViewData.ModelState.ContainsKey("EmailExists"))
+{
+    <div class="alert alert-danger" role="alert">
+        @Html.ValidationMessage("EmailExists")
+    </div>
+}
+
 <div class="container" style="max-width: 20rem; margin-top: 2.5rem; margin-bottom: 2.5rem;">
     <h2 class="display-5 text-center font-weight-bold mb-4">Register</h2>
     <div class="card" style="background-color: #f8f9fa; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,.1);">
@@ -59,4 +66,32 @@ document.getElementById("registerForm").addEventListener("submit", function(even
         document.getElementById("passwordMismatch").style.display = "block";
     }
 });
+
+    document.getElementById("registerForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        var form = this;
+        var formData = new FormData(form);
+
+        fetch('/register', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    // Display error message on the frontend
+                    var errorMessageElement = document.createElement("div");
+                    errorMessageElement.classList.add("alert", "alert-danger");
+                    errorMessageElement.textContent = data.message;
+                    form.prepend(errorMessageElement);
+                } else {
+                    // Redirect to sign-in page if signup was successful
+                    window.location.href = data.redirectTo;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
 </script>
