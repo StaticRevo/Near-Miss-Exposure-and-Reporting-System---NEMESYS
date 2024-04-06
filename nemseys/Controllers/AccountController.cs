@@ -47,7 +47,7 @@ public class AccountController : Controller
 
     // Signup action
     [HttpPost]
-    public ActionResult Signup(Profile profile, string password, string role)
+    public ActionResult Signup(Profile profile, string password, string role, IFormFile profilePicture)
     {
         // Hash the password
         string hashedPassword = HashPassword(password);
@@ -73,6 +73,16 @@ public class AccountController : Controller
         else
         {
             // Handle other cases if necessary
+        }
+
+        // Handle profile picture upload
+        if (profilePicture != null && profilePicture.Length > 0)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                profilePicture.CopyTo(memoryStream);
+                profile.ProfilePicture = memoryStream.ToArray();
+            }
         }
 
         // Save the profile and credentials to the database
