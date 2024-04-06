@@ -52,6 +52,15 @@ public class AccountController : Controller
         // Hash the password
         string hashedPassword = HashPassword(password);
 
+        // Check if the email address already exists in the database
+        var emailExists = _context.Profiles.Any(p => p.Email == profile.Email);
+
+        if (emailExists)
+        {
+            // If email already exists, return a JSON response indicating the error
+            return Json(new { success = false, message = "Email address already exists" });
+        }
+
         // Set ProfileType based on the selected radio button value
         if (role == "investigator")
         {
@@ -69,9 +78,10 @@ public class AccountController : Controller
         // Save the profile and credentials to the database
         SaveProfileAndCredentials(profile, profile.Email, hashedPassword);
 
-        // Redirect to the sign-in page after successful signup
-        return RedirectToAction("SignIn", "Home");
+        // Return a JSON response indicating success
+        return Json(new { success = true, redirectTo = Url.Action("SignIn", "Home") });
     }
+
 
 
     private string HashPassword(string password)
