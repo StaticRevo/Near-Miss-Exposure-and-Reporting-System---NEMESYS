@@ -5,6 +5,7 @@ CREATE TABLE Profiles (
     Name NVARCHAR(100) NOT NULL,
     Email NVARCHAR(100) NOT NULL UNIQUE,
     Phone NVARCHAR(20),
+    ProfilePicture VARBINARY(MAX),
     ProfileType NVARCHAR(20) CHECK (ProfileType IN ('Reporter', 'Investigator'))
 );
 
