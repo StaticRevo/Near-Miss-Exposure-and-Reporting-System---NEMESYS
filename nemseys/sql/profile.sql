@@ -14,6 +14,7 @@ CREATE TABLE Credentials (
     Username NVARCHAR(50) NOT NULL UNIQUE,
     PasswordHash NVARCHAR(100) NOT NULL,
     ProfileId INT NOT NULL,
+    Salt VARBINARY(MAX);,
     FOREIGN KEY (ProfileId) REFERENCES Profiles(ProfileId)
 );
 
