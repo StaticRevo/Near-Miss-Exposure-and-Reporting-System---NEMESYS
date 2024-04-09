@@ -5,6 +5,7 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 public class AccountController : Controller
 {
@@ -17,11 +18,52 @@ public class AccountController : Controller
 
     private bool IsUserAuthenticated(string username, string password)
     {
-        // Placeholder method for user authentication
-        // Implement your actual authentication logic here
-        // For demonstration purposes, always return true
-        return true;
+        // Check if the email exists in the database
+        var profile = _context.Profiles.FirstOrDefault(p => p.Email == username);
+
+        if (profile == null)
+        {
+            // If the profile doesn't exist, authentication fails
+            return false;
+        }
+
+        // Retrieve the stored hashed password and salt from the database
+        var credentials = _context.Credentials.FirstOrDefault(c => c.ProfileId == profile.ProfileId);
+
+        if (credentials == null)
+        {
+            // If the credentials don't exist, authentication fails
+            return false;
+        }
+
+        // Hash the provided password using the stored salt
+        string hashedPassword = HashPassword(password, credentials.Salt);
+
+        // Check if the hashed password matches the stored hashed password
+        bool passwordMatches = hashedPassword.Equals(credentials.PasswordHash);
+
+        return passwordMatches;
     }
+
+    private string HashPassword(string password, byte[] salt)
+    {
+        // Hash the password using PBKDF2 with 10000 iterations
+        string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+            password: password,
+            salt: salt,
+            prf: KeyDerivationPrf.HMACSHA1,
+            iterationCount: 10000,
+            numBytesRequested: 256 / 8));
+
+        return hashed;
+    }
+
+    private bool ComparePasswords(byte[] hashedPassword, byte[] storedHashedPassword)
+    {
+        // Compare two hashed passwords
+        return hashedPassword.SequenceEqual(storedHashedPassword);
+    }
+
 
     // Login action
     public ActionResult Login()
@@ -39,11 +81,13 @@ public class AccountController : Controller
         }
         else
         {
-            // If authentication fails, return the login view with an error message
-            ModelState.AddModelError("", "Invalid username or password");
+            // If authentication fails, set an error message in TempData
+            TempData["ErrorMessage"] = "Invalid email or password. Please try again.";
+            // Redirect to the sign-in page
             return RedirectToAction("SignIn", "Home");
         }
     }
+
 
     // Signup action
     [HttpPost]
@@ -92,8 +136,6 @@ public class AccountController : Controller
         return Json(new { success = true, redirectTo = Url.Action("SignIn", "Home") });
     }
 
-
-
     private string HashPassword(string password)
     {
         // Generate a random salt
@@ -122,9 +164,6 @@ public class AccountController : Controller
 
         if (existingProfile != null)
         {
-            // Handle the case where the email address already exists
-            // For example, you could return an error message or redirect the user
-            // In this example, I'm throwing an exception for demonstration purposes
             throw new InvalidOperationException("Email address already exists");
         }
 
@@ -135,7 +174,7 @@ public class AccountController : Controller
         // Split the stored string back into its salt and hashed password components
         var parts = hashedPassword.Split(':');
         var salt = Convert.FromBase64String(parts[0]);
-        var passwordHash = Convert.FromBase64String(parts[1]); // Convert hashed password to byte array
+        var passwordHash = parts[1]; // Convert hashed password to byte array
 
         // Save credentials to the database
         Credentials credentials = new Credentials
