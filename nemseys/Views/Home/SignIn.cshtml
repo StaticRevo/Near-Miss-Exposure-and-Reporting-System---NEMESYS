@@ -3,6 +3,13 @@
     ViewData["Title"] = "Sign In";
 }
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
 <div class="container" style="max-width: 20rem; margin-top: 5rem; margin-bottom: 5rem;">
     <h2 class="display-5 font-weight-bold mb-4 text-center">Sign In</h2>
     <div class="card" style="background-color: #f8f9fa; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,.1);">
