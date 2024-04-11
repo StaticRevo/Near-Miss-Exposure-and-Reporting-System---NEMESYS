@@ -6,6 +6,11 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 public class AccountController : Controller
 {
@@ -72,20 +77,48 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    public ActionResult Login(string username, string password, string returnUrl)
+    public async Task<ActionResult> Login(string username, string password, string returnUrl)
     {
         if (IsUserAuthenticated(username, password))
         {
-            // If authentication succeeds, redirect the user to the returnUrl or default to "/home/myreports"
+            // Create claims for the authenticated user
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, username),
+                // Add more claims as needed
+            };
+
+            // Create identity from claims
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // Create authentication properties
+            var authProperties = new AuthenticationProperties
+            {
+                // Configure properties like IsPersistent, ExpiresUtc, etc.
+                IsPersistent = true,
+                RedirectUri = returnUrl
+            };
+
+            // Sign in the user
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity), authProperties);
+
+            // Redirect the user to the returnUrl or default to "/home/myreports"
             return RedirectToAction("MyReports", "Home");
         }
         else
         {
-            // If authentication fails, set an error message in TempData
             TempData["ErrorMessage"] = "Invalid email or password. Please try again.";
-            // Redirect to the sign-in page
             return RedirectToAction("SignIn", "Home");
         }
+    }
+
+    public async Task<ActionResult> Logout()
+    {
+        // Sign out the user and remove the authentication cookie
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+        // Redirect the user to the home page or login page
+        return RedirectToAction("Index", "Home");
     }
 
 
