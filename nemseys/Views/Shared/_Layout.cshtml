@@ -28,8 +28,15 @@
                         <i class="fas fa-user-circle fa-2x"></i>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="profileMenuButton">
-                        <li><a asp-controller="Home" asp-action="SignIn" class="dropdown-item">Sign In</a></li>
-                        <li><a asp-controller="Home" asp-action="Register" class="dropdown-item">Register</a></li>
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li><a asp-controller="Home" asp-action="SignIn" class="dropdown-item">Sign In</a></li>
+                            <li><a asp-controller="Home" asp-action="Register" class="dropdown-item">Register</a></li>
+                        }
+                        else
+                        {
+                            <li><a asp-controller="Account" asp-action="Logout" class="dropdown-item">Log Out</a></li>
+                        }
                         <li><a asp-controller="Home" asp-action="Profile" class="dropdown-item">Profile</a></li>
                     </ul>
                 </div>
