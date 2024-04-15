@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Nemesis.Interfaces;
+using Nemesis.Models.Contexts;
+using Nemesis.Models.Interfaces;
+using Nemesis.Models.Repositories;
 using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +18,14 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Register the IReportRepository service with its implementation
+builder.Services.AddTransient<IReportRepository, ReportRepository>();
+
+builder.Services.AddControllersWithViews();
+
 // Add authentication services
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
@@ -23,6 +35,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/Account/Login";
         options.LogoutPath = "/Account/Logout";
     });
+
 
 var app = builder.Build();
 
