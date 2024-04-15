@@ -12,5 +12,6 @@ namespace Nemesis.Models.Interfaces
         void UpdateReport(Report report);
         void DeleteReport(int reportId);
         IEnumerable<Category> GetAllCategories();
+        Category GetCategoryByID(int categoryId);
     }
 }
