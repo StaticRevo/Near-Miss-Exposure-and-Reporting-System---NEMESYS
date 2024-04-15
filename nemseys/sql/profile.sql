@@ -29,8 +29,8 @@ CREATE TABLE Reports (
     Status NVARCHAR(50) NOT NULL,
     ImageUrl NVARCHAR(MAX) NULL,
     Upvotes INT NOT NULL DEFAULT 0,
-    ProfileId INT NOT NULL,
-    FOREIGN KEY (ProfileId) REFERENCES Profiles(ProfileId),
+    ReportId INT NOT NULL,
+    FOREIGN KEY (ReportId) REFERENCES Profiles(ProfileId),
 );
 
 CREATE TABLE Investigations (
