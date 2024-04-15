@@ -1,6 +1,51 @@
-@model Nemesis.ViewModels.ReportViewModel
+@model Nemesis.ViewModels.ReportListViewModel
 
 @{
+    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Reports";
 }
-﻿
+
+<div class="container px-4 py-5">
+    <h2>Showing @Model.TotalEntries Reports</h2>
+
+    @foreach (var report in Model.Reports)
+    {
+        <div class="card mb-3" style="max-width: 85vw;">
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                    @if (!string.IsNullOrWhiteSpace(report.ImageUrl))
+                    {
+                        <img src="@report.ImageUrl" class="card-img" alt="Report visual">
+                    }
+                    else
+                    {
+                        <img src="https://placehold.co/300x350" class="card-img" alt="Report visual placeholder">
+                    }
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h3 class="card-title" style="color: #141414;">@report.TitleOfReport</h3>
+                        <p class="card-text text-secondary">
+                            @report.Description
+                        </p>
+                        <div class="d-flex">
+                            <a asp-controller="Report" asp-action="Details" asp-route-id="@report.ReportId" class="btn btn-dark text-secondary py-2 px-4 mr-2">View Report</a>
+                            <a asp-controller="Report" asp-action="InvestigateReport" asp-route-id="@report.ReportId" class="btn btn-dark text-secondary py-2 px-4">Investigate Report</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <button type="button" class="btn">
+                            <i class="fas fa-arrow-up"></i>
+                        </button>
+                        <span class="text-dark mx-2">@report.Upvotes</span>
+                        <button type="button" class="btn">
+                            <i class="fas fa-arrow-down"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
