@@ -37,5 +37,6 @@ namespace Nemesis.Models.Contexts
             base.OnModelCreating(modelBuilder);
            
         }
+
     }
 }
