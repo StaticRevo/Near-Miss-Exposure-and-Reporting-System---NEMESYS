@@ -1,4 +1,3 @@
-﻿
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -23,6 +22,10 @@ namespace Nemesis.Models
         [StringLength(50)]
         public string TypeOfHazard { get; set; }
 
+        // This was missing in your initial model
+        [StringLength(255)]
+        public string TitleOfReport { get; set; }
+
         [Required]
         public string Description { get; set; }
 
@@ -30,18 +33,26 @@ namespace Nemesis.Models
         [StringLength(50)]
         public string Status { get; set; }
 
-        // Optional: For storing the path or URL to the photo
-        public string PhotoPath { get; set; }
+        // This was missing in your initial model
+        public string ImageUrl { get; set; }
 
         public int Upvotes { get; set; }
 
-        // Foreign key
+        // Foreign key for the reporter
         [ForeignKey("Reporter")]
         public int ReporterId { get; set; }
 
         // Navigation properties
         public virtual Profile Reporter { get; set; }
-        public virtual Investigation Investigation { get; set; } // Assuming one-to-one relationship
-    }
 
+        // Assuming one-to-one relationship with Investigation
+        public virtual Investigation Investigation { get; set; }
+
+        // Foreign key for Category, assuming it's a one-to-one relationship
+        // Add the foreign key for Category here if it's one-to-one
+        // public int CategoryId { get; set; }
+
+        // Navigation property for Category, changed to match the type in ViewModel
+        public virtual Category Category { get; set; }
+    }
 }
