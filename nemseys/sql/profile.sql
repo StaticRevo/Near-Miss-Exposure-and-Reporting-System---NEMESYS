@@ -24,12 +24,13 @@ CREATE TABLE Reports (
     HazardLocation NVARCHAR(255) NOT NULL,
     DateAndTimeSpotted DATETIME NOT NULL,
     TypeOfHazard NVARCHAR(50) NOT NULL,
+    TitleOfReport NVARCHAR(255) NULL,
     Description NVARCHAR(MAX) NOT NULL,
-    Status NVARCHAR(50) NOT NULL CHECK (Status IN ('Open', 'Closed', 'Being Investigated', 'No Action Required')),
-    ReporterId INT NOT NULL,
-    Photo VARBINARY(MAX), -- optional, consider file storage for scalability
+    Status NVARCHAR(50) NOT NULL,
+    ImageUrl NVARCHAR(MAX) NULL,
     Upvotes INT NOT NULL DEFAULT 0,
-    FOREIGN KEY (ReporterId) REFERENCES Profiles(ProfileId)
+    ProfileId INT NOT NULL,
+    FOREIGN KEY (ProfileId) REFERENCES Profiles(ProfileId),
 );
 
 CREATE TABLE Investigations (
