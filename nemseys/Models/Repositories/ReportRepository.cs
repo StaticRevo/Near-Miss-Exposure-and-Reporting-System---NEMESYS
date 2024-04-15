@@ -1,11 +1,11 @@
 using System;
 using Nemesis.Models.Contexts;
 using Microsoft.EntityFrameworkCore;
-using Nemesis.Interfaces;
+using Nemesis.Models.Interfaces;
 
 namespace Nemesis.Models.Repositories
 {
-	public class ReportRepository: IReportRepository
+    public class ReportRepository: IReportRepository
     {
         private readonly AppDbContext _appDbcontext;
 
@@ -19,17 +19,22 @@ namespace Nemesis.Models.Repositories
             return _appDbcontext.Reports.ToList();
         }
 
+        public Report GetReportByID(int reportId)
+        {
+            return _appDbcontext.Reports.Include(b => b.Category).FirstOrDefault(p => p.ReportId == reportId);
+        }
+
         public Report GetReportById(int reportId)
         {
             return _appDbcontext.Reports.Find(reportId);
         }
 
-        public void AddReport(Report report)
+        public void CreateReport(Report report)
         {
             _appDbcontext.Reports.Add(report);
             _appDbcontext.SaveChanges();
         }
-
+      
         public void UpdateReport(Report report)
         {
             _appDbcontext.Entry(report).State = EntityState.Modified;
@@ -44,6 +49,14 @@ namespace Nemesis.Models.Repositories
                 _appDbcontext.Reports.Remove(report);
                 _appDbcontext.SaveChanges();
             }
+        }
+        public IEnumerable<Category> GetAllCategories()
+        {
+            return _appDbcontext.Categories;
+        }
+        public Category GetCategoryByID(int categoryId)
+        {
+            return _appDbcontext.Categories.FirstOrDefault(c => c.Id == categoryId);
         }
     }
 }
