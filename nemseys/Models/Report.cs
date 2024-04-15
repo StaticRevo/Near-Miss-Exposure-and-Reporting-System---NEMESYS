@@ -47,12 +47,8 @@ namespace Nemesis.Models
 
         // Assuming one-to-one relationship with Investigation
         public virtual Investigation Investigation { get; set; }
+        public int CategoryId { get; set; }
 
-        // Foreign key for Category, assuming it's a one-to-one relationship
-        // Add the foreign key for Category here if it's one-to-one
-        // public int CategoryId { get; set; }
-
-        // Navigation property for Category, changed to match the type in ViewModel
         public virtual Category Category { get; set; }
     }
 }
