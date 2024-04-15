@@ -1,12 +1,16 @@
-﻿namespace Nemesis.Models.Interfaces
+using System.Collections.Generic;
+using Nemesis.Models;
+
+
+namespace Nemesis.Models.Interfaces
 {
-    public interface IBloggyRepository
+    public interface IReportRepository
     {
-        //IEnumerable<BlogPost> GetAllBlogPosts();
-        //BlogPost GetBlogPostById(int blogPostId);
-
-        //IEnumerable<Category> GetAllCategories();
-        //Category GetCategoryById(int categoryId);
-
+        IEnumerable<Report> GetAllReports();
+        Report GetReportByID(int reportId);
+        void CreateReport(Report report);
+        void UpdateReport(Report report);
+        void DeleteReport(int reportId);
+        IEnumerable<Category> GetAllCategories();
     }
 }
