@@ -1,1 +1,102 @@
+@model Nemesis.ViewModels.EditReportViewModel
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Log A Report";
+}
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h2 class="display-5 text-center mb-5 font-weight-bold">Log A Report</h2>
+
+
+                <!-- Report Information -->
+                <div class="form-group">
+                    <label asp-for="TitleOfReport">Title of Report</label>
+                    <input asp-for="TitleOfReport" class="form-control" placeholder="Enter the title of the report">
+                    <span asp-validation-for="TitleOfReport" class="text-danger"></span>
+                </div>
+                <div class="mb-5">
+                    <h3 class="h4 mb-3 font-weight-semibold">Report Information</h3>
+                    <p class="text-secondary mb-3">Provide detailed information about the hazard.</p>
+                    <textarea asp-for="Description" class="form-control bg-secondary text-light" rows="6" placeholder="Describe the issue..."></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <!-- Upload Images -->
+                <div class="mb-5">
+                    <h3 class="h4 mb-3 font-weight-semibold">Upload Images</h3>
+                    <div class="custom-file">
+                        <input asp-for="ImageToUpload" type="file" class="custom-file-input" id="customFile">
+                        <label class="custom-file-label bg-secondary text-light" for="customFile">Attach images</label>
+                    </div>
+                </div>
+
+                <!-- Report Parameters -->
+                <div class="mb-5">
+                    <h3 class="h4 mb-3 font-weight-semibold">Report Parameters</h3>
+                    <div class="form-group">
+                        <label asp-for="DateOfReport">Date of Report</label>
+                        <input asp-for="DateOfReport" type="date" class="form-control">
+                        <span asp-validation-for="DateOfReport" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="HazardLocation">Location of Hazard</label>
+                        <input asp-for="HazardLocation" class="form-control" placeholder="Enter location">
+                        <span asp-validation-for="HazardLocation" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DateAndTimeSpotted">Date and Time of Hazard</label>
+                        <input asp-for="DateAndTimeSpotted" type="datetime-local" class="form-control">
+                        <span asp-validation-for="DateAndTimeSpotted" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="TypeOfHazard">Type of Hazard</label>
+                        <select asp-for="TypeOfHazard" class="form-control">
+                            <option value="">Select Type</option>
+                            <option value="Unsafe Act">Unsafe Act</option>
+                            <option value="Condition">Condition</option>
+                            <option value="Equipment">Equipment</option>
+                            <option value="Structure">Structure</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Status">Status</label>
+                        <select asp-for="Status" class="form-control">
+                            <option value="Reported">Reported</option>
+                            <option value="Under Review">Under Review</option>
+                            <option value="Resolved">Resolved</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="CategoryId" class="col-md-2"></label>
+                        <div class="col-md-5">
+                            <select asp-for="CategoryId" asp-items="@(new SelectList(Model.CategoryList, "Id", "Name"))" class="form-control"></select>
+                            <span asp-validation-for="CategoryId" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
+                    <input asp-for="ReporterEmail" type="hidden" value="@User.Identity.Name" />
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-flex justify-content-center">
+                    <input type="submit" class="btn btn-primary" value="Submit Report"/>
+                    <a asp-controller="Report" asp-action="Index" class="btn btn-outline-secondary">Back to list</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<a href="#"></a>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
 ﻿
