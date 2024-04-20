@@ -1,65 +1,62 @@
-using System.Diagnostics;
+using Nemesys.Models.Interfaces;
+using Nemesys.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Nemesis.Models;
 
-namespace Nemesis.Controllers;
+namespace Nemesys.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly INemeseysRepository _nemeseysRepository;
+    private readonly UserManager<IdentityUser> _userManager;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(INemeseysRepository bloggyRepository, UserManager<IdentityUser> userManager)
     {
-        _logger = logger;
+        _nemeseysRepository = bloggyRepository;
+        _userManager = userManager;
     }
 
+    [HttpGet]
+    [ResponseCache(Duration = 10, Location = ResponseCacheLocation.Client)]
+
+    [Authorize(Roles = "Admin")]
+    public IActionResult Dashboard()
+    {
+        try
+        {
+            var model = new ReportDashboardViewModel();
+            model.TotalRegisteredUsers = _userManager.Users.Count();
+            model.TotalEntries = _nemeseysRepository.GetAllReports().Count();
+
+            return View(model);
+        }
+        catch (Exception ex)
+        {
+            //_logger.LogError(ex.Message); //More on this soon
+            return View("Error");
+        }
+
+    }
     public IActionResult Index()
     {
+        //Load data from the Model
+        ViewBag.Title = "Nemesys - Home";
+        ViewBag.Message = "Hello!";
         return View();
     }
 
-    public IActionResult Privacy()
+    public class ModelBindingTest
     {
-        return View();
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 
-    public IActionResult LogReport()
+    public IActionResult About(ModelBindingTest test)
     {
+        //Load data from the Model
+        ViewBag.Title = "Nemesys - About";
+        ViewBag.Message = "Hello there, this is the about page. The model binder found - " + test.Name + " - " + test.Id;
         return View();
-    }
-    public IActionResult MyReports()
-    {
-        return View("myreports");
-    }
-    public IActionResult SignIn()
-    {
-        return View("signin");
-    }
-    public IActionResult Register()
-    {
-        return View();
-    }
-    public IActionResult ViewReport()
-    {
-        return View();
-    }
-    public IActionResult Profile()
-    {
-        return View();
-    }
-    public IActionResult InvestigateReport()
-    {
-        return View();
-    }
-    public IActionResult HallOfFame()
-    {
-        return View();
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
-
