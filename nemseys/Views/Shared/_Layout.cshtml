@@ -18,10 +18,12 @@
         {
             <a asp-controller="Home" asp-action="Index" class="h2 font-weight-bold text-light text-decoration-none">Nemesys</a>
             <div class="d-flex align-items-center">
- 
+
                 <a asp-controller="Home" asp-action="MyReports" class="@(ViewContext.RouteData.Values["action"].ToString() == "MyReports" ? "active-link" : "text-light") hover:text-white mr-3">My Reports</a>
                 <a asp-controller="Report" asp-action="Create" class="@(ViewContext.RouteData.Values["action"].ToString() == "Create" && ViewContext.RouteData.Values["controller"].ToString() == "Reports" ? "active-link" : "text-light") hover:text-white mr-3">Log Report</a>
                 <a asp-controller="Home" asp-action="HallOfFame" class="@(ViewContext.RouteData.Values["action"].ToString() == "HallOfFame" ? "active-link" : "text-light") hover:text-white mr-3">Hall Of Fame</a>
+
+                @await Html.PartialAsync("_LoginPartial")
 
                 <!-- Profile Icon with Dropdown -->
                 <div class="dropdown">
