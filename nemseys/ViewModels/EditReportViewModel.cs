@@ -1,22 +1,23 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Nemesis.ViewModels
+namespace Nemesys.ViewModels
 {
     public class EditReportViewModel
     {
         public int ReportId { get; set; }
 
         [Required(ErrorMessage = "Date of report is required")]
+        [DataType(DataType.DateTime)]
         [Display(Name = "Date of Report")]
         public DateTime DateOfReport { get; set; }
 
         [Required(ErrorMessage = "Hazard location is required")]
-        [StringLength(100)]
+        [StringLength(255)]
         [Display(Name = "Hazard Location")]
         public string HazardLocation { get; set; }
 
         [Required(ErrorMessage = "Date and time spotted is required")]
+        [DataType(DataType.DateTime)]
         [Display(Name = "Date and Time Spotted")]
         public DateTime DateAndTimeSpotted { get; set; }
 
@@ -25,41 +26,27 @@ namespace Nemesis.ViewModels
         [Display(Name = "Type of Hazard")]
         public string TypeOfHazard { get; set; }
 
-        [Required(ErrorMessage = "A title is required")]
-        [StringLength(100)]
+        [StringLength(255)]
         [Display(Name = "Title of Report")]
         public string TitleOfReport { get; set; }
 
         [Required(ErrorMessage = "Description is required")]
-        [StringLength(500)]
+        [StringLength(int.MaxValue, MinimumLength = 20, ErrorMessage = "Description must be at least 20 characters long")]
         [Display(Name = "Description")]
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Status is required")]
-        [StringLength(30)]
+        [StringLength(50)]
         [Display(Name = "Status")]
         public string Status { get; set; }
 
         public string? ImageUrl { get; set; }
-        [Display(Name = "Featured Image")]
-        public IFormFile ImageToUpload { get; set; }
 
-        [Required(ErrorMessage = "Reporter email is required")]
-        [EmailAddress]
-        [Display(Name = "Reporter Email")]
-        public string ReporterEmail { get; set; }
+        [Display(Name = "Upload Image")]
+        public IFormFile? ImageToUpload { get; set; }
 
         [Display(Name = "Upvotes")]
         public int Upvotes { get; set; }
 
-        [Display(Name = "Category")]
-        public ReportCategoryViewModel Category { get; set; }
-        public int CategoryId { get; set; }
-
-        public List<ReportCategoryViewModel>? CategoryList { get; set; }
-
-        public EditReportViewModel()
-        {
-        }
     }
 }
