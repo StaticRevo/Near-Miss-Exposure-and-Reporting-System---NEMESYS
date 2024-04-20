@@ -1,28 +1,31 @@
-using Nemesis.Models;
-using Nemesis.Models.Interfaces;
-using Nemesis.Models.Repositories;
-using Nemesis.ViewModels;
+using Nemesys.Models;
+using Nemesys.Models.Interfaces;
+using Nemesys.Models.Repositories;
+using Nemesys.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Nemesis.ViewModels;
+using Bloggy.ViewModels;
 
-
-namespace Nemesis.Controllers
+namespace Nemesys.Controllers
 {
     public class ReportController : Controller
     {
-        private readonly IReportRepository _reportRepository;
+        private readonly INemeseysRepository _nemeseysRepository;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ReportController(IReportRepository reportRepository) // Constructor Dependency Injection
+        public ReportController(INemeseysRepository nemeseysRepository, UserManager<IdentityUser> userManager)
         {
-            _reportRepository = reportRepository;
+            _nemeseysRepository = nemeseysRepository;
+            _userManager = userManager;
         }
-        public IActionResult Index() // Listing the Reports
+        public IActionResult Index()
         {
-            var reports = _reportRepository.GetAllReports().OrderByDescending(b => b.DateOfReport);
+            var reports = _nemeseysRepository.GetAllReports().OrderByDescending(b => b.DateOfReport);
             var model = new ReportListViewModel()
             {
-                TotalEntries = _reportRepository.GetAllReports().Count(),
-                Reports = _reportRepository
+                TotalEntries = _nemeseysRepository.GetAllReports().Count(),
+                Reports = _nemeseysRepository
                 .GetAllReports()
                 .OrderByDescending(b => b.DateOfReport)
                 .Select(b => new ReportViewModel
@@ -36,127 +39,194 @@ namespace Nemesis.Controllers
                     Description = b.Description,
                     Status = b.Status,
                     ImageUrl = b.ImageUrl,
-                    ReporterEmail = b.Reporter.Email,
                     Upvotes = b.Upvotes,
-                    Category = new ReportCategoryViewModel()
+
+                    Author = new AuthorViewModel()
                     {
-                        Id = b.Category.Id,
-                        Name = b.Category.Name
+                        Id = b.UserId,
+                        Name = (_userManager.FindByIdAsync(b.UserId).Result != null) ?
+                            _userManager.FindByIdAsync(b.UserId).Result.UserName : "Anonymous"
                     }
                 })
             };
-
             return View(model);
-
         }
-        public IActionResult Details(int reportId)
+        public IActionResult Details(int id)
         {
-            var reports = _reportRepository.GetReportByID(reportId);
-            if (reports == null)
+            var report = _nemeseysRepository.GetReportById(id);
+            if (report == null)
                 return NotFound();
             else
             {
                 var model = new ReportViewModel()
                 {
-                    ReportId = reports.ReportId,
-                    DateOfReport = reports.DateOfReport,
-                    HazardLocation = reports.HazardLocation,
-                    DateAndTimeSpotted = reports.DateAndTimeSpotted,
-                    TypeOfHazard = reports.TypeOfHazard,
-                    TitleOfReport = reports.TitleOfReport,
-                    Description = reports.Description,
-                    Status = reports.Status,
-                    ImageUrl = reports.ImageUrl,
-                    ReporterEmail = reports.Reporter.Email,
-                    Upvotes = reports.Upvotes,
-                    Category = new ReportCategoryViewModel()
+                    ReportId = report.ReportId,
+                    DateOfReport = report.DateOfReport,
+                    HazardLocation = report.HazardLocation,
+                    DateAndTimeSpotted = report.DateAndTimeSpotted,
+                    TypeOfHazard = report.TypeOfHazard,
+                    TitleOfReport = report.TitleOfReport,
+                    Description = report.Description,
+                    Status = report.Status,
+                    ImageUrl = report.ImageUrl,
+                    Upvotes = report.Upvotes,
+
+                    Author = new AuthorViewModel()
                     {
-                        Id = reports.Category.Id,
-                        Name = reports.Category.Name
+                        Id = report.UserId,
+                        Name = (_userManager.FindByIdAsync(report.UserId).Result != null) ?
+                            _userManager.FindByIdAsync(report.UserId).Result.UserName : "Anonymous"
                     }
                 };
                 return View(model);
             }
         }
-
+        [Authorize]
         [HttpGet]
-public IActionResult Create()
-{
-    // Fetch categories from the repository
-    var categories = _reportRepository.GetAllCategories();
-    if (categories == null)
-    {
-        // Handle the case where categories could not be retrieved
-        return View("Error"); // Or any other appropriate view/error handling
-    }
+        public IActionResult Create()
+        {
 
-    // Create a list of ReportCategoryViewModel from the categories
-    var categoryList = categories.Select(c => new ReportCategoryViewModel
-    {
-        Id = c.Id,
-        Name = c.Name,
-    }).ToList();
+            var model = new EditReportViewModel()
+            {
+                DateOfReport = DateTime.Now,
+                Status = "Open"
+            };
 
-    var model = new EditReportViewModel()
-    {
-        CategoryList = categoryList
-    };
+            return View(model);
+        }
 
-    // Pass the model to the view
-    return View(model);
-}
-
+        [Authorize]
         [HttpPost]
-        public IActionResult Create([Bind("TitleOfReport, Description, ImageToUpload, CategoryId, HazardLocation, DateOfReport, DateAndTimeSpotted, TypeOfHazard, Status, ReporterEmail")] EditReportViewModel newReport)
+        public IActionResult Create([Bind("TitleOfReport, Description, ImageToUpload, DateOfReport, HazardLocation, DateAndTimeSpotted, TypeOfHazard, Status")] EditReportViewModel newReport)
         {
             if (ModelState.IsValid)
             {
                 string fileName = "";
                 if (newReport.ImageToUpload != null)
                 {
-                    var extension = Path.GetExtension(newReport.ImageToUpload.FileName);
+                    // Check for file aspects such as size, extension, etc., and store with a unique name (e.g., GUID)
+                    var extension = "." + newReport.ImageToUpload.FileName.Split('.')[newReport.ImageToUpload.FileName.Split('.').Length - 1];
                     fileName = Guid.NewGuid().ToString() + extension;
                     var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "reports", fileName);
-
-                    using (var stream = new FileStream(path, FileMode.Create))
+                    using (var bits = new FileStream(path, FileMode.Create))
                     {
-                        newReport.ImageToUpload.CopyTo(stream);
+                        newReport.ImageToUpload.CopyTo(bits);
                     }
-                    newReport.ImageUrl = "/images/reports/" + fileName;
+                    newReport.ImageUrl = "/images/reports/" + fileName; // Set the ImageUrl to the new file path
                 }
 
-                // Create a report instance from the bound model
                 Report report = new Report()
                 {
-                    TitleOfReport = newReport.TitleOfReport,
-                    Description = newReport.Description,
                     DateOfReport = newReport.DateOfReport,
                     HazardLocation = newReport.HazardLocation,
                     DateAndTimeSpotted = newReport.DateAndTimeSpotted,
                     TypeOfHazard = newReport.TypeOfHazard,
+                    TitleOfReport = newReport.TitleOfReport,
+                    Description = newReport.Description,
                     Status = newReport.Status,
-                    ImageUrl = "/images/reports" + fileName,
-                    Upvotes = 0, // Initialize upvotes as 0 for new reports                                                             §§§
-                    
+                    ImageUrl = newReport.ImageUrl,
+                    Upvotes = 0, // Initialize upvotes, assuming new reports start with zero upvotes
+                    UserId = _userManager.GetUserId(User) // Assuming you have user management that associates reports with users
                 };
 
-                // Persist the new report into the repository
-                _reportRepository.CreateReport(report);
+                // Persist to repository
+                _nemeseysRepository.CreateReport(report);
                 return RedirectToAction("Index");
             }
             else
             {
-                // Load categories again to repopulate the dropdown if there's a validation error
-                var categoryList = _reportRepository.GetAllCategories().Select(c => new ReportCategoryViewModel
-                {
-                    Id = c.Id,
-                    Name = c.Name
-                }).ToList();
-
-                newReport.CategoryList = categoryList; // Attach categories to the ViewModel
-
+                // If the model state is not valid, return to the view with the current model to allow for corrections
                 return View(newReport);
             }
+
         }
+        [Authorize]
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var existingReport = _nemeseysRepository.GetReportById(id);
+            if (existingReport != null)
+            {
+                // Check if the current user has access to this resource
+                var currentUserId = _userManager.GetUserId(User);
+                if (existingReport.UserId == currentUserId)
+                {
+                    EditReportViewModel model = new EditReportViewModel()
+                    {
+                        ReportId = existingReport.ReportId,
+                        DateOfReport = existingReport.DateOfReport,
+                        HazardLocation = existingReport.HazardLocation,
+                        DateAndTimeSpotted = existingReport.DateAndTimeSpotted,
+                        TypeOfHazard = existingReport.TypeOfHazard,
+                        TitleOfReport = existingReport.TitleOfReport,
+                        Description = existingReport.Description,
+                        Status = existingReport.Status,
+                        ImageUrl = existingReport.ImageUrl,
+                        Upvotes = existingReport.Upvotes,
+                    };
+
+                    return View(model);
+                }
+                else
+                    return Forbid(); // Or redirect to an error page or to the Index page
+            }
+            else
+                return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Edit([FromRoute] int id, [Bind("ReportId, DateOfReport, HazardLocation, DateAndTimeSpotted, TypeOfHazard, TitleOfReport, Description, Status, ImageToUpload")] EditReportViewModel updatedReport)
+        {
+            var reportToUpdate = _nemeseysRepository.GetReportById(id);
+            if (reportToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            // Check if the current user has access to this resource
+            var currentUserId = _userManager.GetUserId(User);
+            if (reportToUpdate.UserId == currentUserId)
+            {
+                if (ModelState.IsValid)
+                {
+                    if (updatedReport.ImageToUpload != null)
+                    {
+                        string fileName = "";
+                        // At this point, you should check file size, extension, etc.
+                        // Then persist using a new name for consistency (e.g., new Guid)
+                        var extension = "." + updatedReport.ImageToUpload.FileName.Split('.')[updatedReport.ImageToUpload.FileName.Split('.').Length - 1];
+                        fileName = Guid.NewGuid().ToString() + extension;
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "reports", fileName);
+                        using (var bits = new FileStream(path, FileMode.Create))
+                        {
+                            updatedReport.ImageToUpload.CopyTo(bits);
+                        }
+                        reportToUpdate.ImageUrl = "/images/reports/" + fileName;  // Update the imageUrl
+                    }
+
+                    // Update other fields
+                    reportToUpdate.DateOfReport = updatedReport.DateOfReport;
+                    reportToUpdate.HazardLocation = updatedReport.HazardLocation;
+                    reportToUpdate.DateAndTimeSpotted = updatedReport.DateAndTimeSpotted;
+                    reportToUpdate.TypeOfHazard = updatedReport.TypeOfHazard;
+                    reportToUpdate.TitleOfReport = updatedReport.TitleOfReport;
+                    reportToUpdate.Description = updatedReport.Description;
+                    reportToUpdate.Status = updatedReport.Status;
+
+                    _nemeseysRepository.UpdateReport(reportToUpdate);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    // If the model state is not valid, return to the view with the current model to allow for corrections
+                    return View(updatedReport);
+                }
+            }
+            else
+                return Forbid(); // Or redirect to an error page or to the Index page
+        }
+
+
     }
 }
