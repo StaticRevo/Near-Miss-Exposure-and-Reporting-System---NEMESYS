@@ -1,5 +1,7 @@
-CREATE DATABASE nemesis
+-- Create the database
+CREATE DATABASE nemesis;
 
+-- Create Profiles table
 CREATE TABLE Profiles (
     ProfileId INT PRIMARY KEY IDENTITY,
     Name NVARCHAR(100) NOT NULL,
@@ -9,6 +11,7 @@ CREATE TABLE Profiles (
     ProfileType NVARCHAR(20) CHECK (ProfileType IN ('Reporter', 'Investigator'))
 );
 
+-- Create Credentials table
 CREATE TABLE Credentials (
     UserId INT PRIMARY KEY IDENTITY,
     Username NVARCHAR(50) NOT NULL UNIQUE,
@@ -18,24 +21,24 @@ CREATE TABLE Credentials (
     FOREIGN KEY (ProfileId) REFERENCES Profiles(ProfileId)
 );
 
+-- Create Reports table
 CREATE TABLE Reports (
     ReportId INT PRIMARY KEY IDENTITY,
     DateOfReport DATETIME NOT NULL,
     HazardLocation NVARCHAR(255) NOT NULL,
     DateAndTimeSpotted DATETIME NOT NULL,
     TypeOfHazard NVARCHAR(50) NOT NULL,
-    TitleOfReport NVARCHAR(255) NULL,
+    TitleOfReport NVARCHAR(255),
     Description NVARCHAR(MAX) NOT NULL,
     Status NVARCHAR(50) NOT NULL,
-    ImageUrl NVARCHAR(MAX) NULL,
-    Upvotes INT NOT NULL DEFAULT 0,
-    ReportId INT NOT NULL,
-    FOREIGN KEY (ReportId) REFERENCES Profiles(ProfileId),
+    ImageUrl NVARCHAR(MAX),
+    Upvotes INT NOT NULL DEFAULT 0
 );
 
+-- Create Investigations table
 CREATE TABLE Investigations (
     InvestigationId INT PRIMARY KEY IDENTITY,
-    ReportId INT NOT NULL UNIQUE,
+    ReportId INT NOT NULL,
     Description NVARCHAR(MAX) NOT NULL,
     DateOfAction DATETIME NOT NULL,
     InvestigatorId INT NOT NULL,
