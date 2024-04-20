@@ -1,4 +1,4 @@
-﻿@model Nemesis.ViewModels.ReportViewModel
+@model Nemesys.ViewModels.ReportViewModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -40,18 +40,14 @@
                 </div>
             </div>
         </div>
-
         <!-- Additional Report Details -->
         <div>
             <h3 class="h5 font-weight-semibold">Additional Details</h3>
             <p><strong>Status:</strong> @Model.Status</p>
             <p><strong>Spotted On:</strong> @Model.DateAndTimeSpotted.ToString("MMMM dd, yyyy HH:mm")</p>
-            <p><strong>Reported By:</strong> @Model.ReporterEmail</p>
-            <p><strong>Category:</strong> @Model.Category?.Name ?? "Not Categorized"</p>
             <p><strong>Upvotes:</strong> @Model.Upvotes</p>
         </div>
     </section>
 </div>
 
 <a asp-controller="Report" asp-action="Index" class="btn btn-primary">Back to List</a>
-
