@@ -38,11 +38,30 @@ public class HomeController : Controller
         }
 
     }
-    public IActionResult Index()
+    public IActionResult Index(string sortOrder)
     {
-        //Load data from the Model
-        ViewBag.Title = "Nemesys - Home";
-        ViewBag.Message = "Hello!";
+        // Retrieve the reports from the database
+        var reports = _nemeseysRepository.GetAllReports();
+
+        switch (sortOrder)
+        {
+            case "Upvotes":
+                reports = reports.OrderByDescending(r => r.Upvotes);
+                break;
+            case "DateOfReport":
+                reports = reports.OrderByDescending(r => r.DateOfReport);
+                break;
+            default:
+                reports = reports.OrderByDescending(r => r.DateOfReport);
+                break;
+        }
+
+        // Pass the sorted reports to the view
+        return View(reports.ToList());
+    }
+
+    public IActionResult HallOfFame()
+    {
         return View();
     }
 
