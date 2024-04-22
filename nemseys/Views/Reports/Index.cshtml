@@ -28,9 +28,15 @@
                         <p class="card-text text-secondary">
                             @report.Description
                         </p>
+                        <p class="card-text" style="font-size: 1.25rem;">
+                            <small class="text-muted">Reported on @report.DateOfReport.ToString("d")</small>
+                        </p>
                         <div class="d-flex">
                             <a asp-controller="Report" asp-action="Details" asp-route-id="@report.ReportId" class="btn btn-dark text-secondary py-2 px-4 mr-2">View Report</a>
-                            <a asp-controller="Report" asp-action="InvestigateReport" asp-route-id="@report.ReportId" class="btn btn-dark text-secondary py-2 px-4">Investigate Report</a>
+                            @if (User.IsInRole("Investigator"))
+                            {
+                                <a asp-controller="Report" asp-action="InvestigateReport" asp-route-id="@report.ReportId" class="btn btn-dark text-secondary py-2 px-4">Investigate Report</a>
+                            }
                         </div>
                     </div>
                 </div>
