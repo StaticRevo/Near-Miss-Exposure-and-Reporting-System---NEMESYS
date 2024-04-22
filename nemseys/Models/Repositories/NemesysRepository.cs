@@ -46,5 +46,11 @@ namespace Nemesys.Models.Repositories
                 _appDbContext.SaveChanges();
             }
         }
+        public void DeleteReport(Report report)
+        {
+            _appDbContext.Reports.Remove(report);
+            _appDbContext.SaveChanges();
+        }
+
     }
 }
