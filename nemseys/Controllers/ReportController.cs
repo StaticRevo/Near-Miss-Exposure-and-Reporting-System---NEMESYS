@@ -227,6 +227,68 @@ namespace Nemesys.Controllers
                 return Forbid(); // Or redirect to an error page or to the Index page
         }
 
+        [Authorize]
+        public IActionResult MyReports()
+        {
+            var userId = _userManager.GetUserId(User);
+            var reports = _nemeseysRepository.GetAllReports()
+                .Where(b => b.UserId == userId)
+                .OrderByDescending(b => b.DateOfReport);
+
+            var model = new ReportListViewModel()
+            {
+                TotalEntries = reports.Count(),
+                Reports = reports.Select(b => new ReportViewModel
+                {
+                    ReportId = b.ReportId,
+                    DateOfReport = b.DateOfReport,
+                    HazardLocation = b.HazardLocation,
+                    DateAndTimeSpotted = b.DateAndTimeSpotted,
+                    TypeOfHazard = b.TypeOfHazard,
+                    TitleOfReport = b.TitleOfReport,
+                    Description = b.Description,
+                    Status = b.Status,
+                    ImageUrl = b.ImageUrl,
+                    Upvotes = b.Upvotes,
+
+                    Author = new AuthorViewModel()
+                    {
+                        Id = b.UserId,
+                        Name = (_userManager.FindByIdAsync(b.UserId).Result != null) ?
+                            _userManager.FindByIdAsync(b.UserId).Result.UserName : "Anonymous"
+                    }
+                })
+            };
+
+            return View(model);
+        }
+        [HttpPost]
+        [Authorize]
+        public IActionResult Upvote(int id)
+        {
+            var report = _nemeseysRepository.GetReportById(id);
+            if (report != null)
+            {
+                report.Upvotes++;
+                _nemeseysRepository.UpdateReport(report);
+            }
+            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Downvote(int id)
+        {
+            var report = _nemeseysRepository.GetReportById(id);
+            if (report != null && report.Upvotes > 0)
+            {
+                report.Upvotes--;
+                _nemeseysRepository.UpdateReport(report);
+            }
+            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index");
+        }
 
     }
 }
