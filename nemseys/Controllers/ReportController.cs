@@ -289,6 +289,54 @@ namespace Nemesys.Controllers
             return RedirectToAction("Index", "Home");
             return RedirectToAction("Index");
         }
+        // This method responds to GET requests and shows the confirmation page
+        [HttpGet]
+        [Authorize]
+        public IActionResult Delete(int id)
+        {
+            var report = _nemeseysRepository.GetReportById(id);
+            if (report == null)
+            {
+                return NotFound();
+            }
+
+            // Check if the current user has access to this resource
+            var currentUserId = _userManager.GetUserId(User);
+            if (report.UserId == currentUserId)
+            {
+                return View(report);
+            }
+            else
+            {
+                return Forbid(); // Or redirect to an error page or to the Index page
+            }
+        }
+
+        // This method responds to POST requests and actually deletes the report
+        [HttpPost, ActionName("Delete")]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var report = _nemeseysRepository.GetReportById(id);
+            if (report == null)
+            {
+                return NotFound();
+            }
+
+            // Check if the current user has access to this resource
+            var currentUserId = _userManager.GetUserId(User);
+            if (report.UserId == currentUserId)
+            {
+                _nemeseysRepository.DeleteReport(report);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return Forbid(); // Or redirect to an error page or to the Index page
+            }
+        }
+
 
     }
 }
