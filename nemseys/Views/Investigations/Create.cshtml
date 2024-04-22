@@ -1,1 +1,71 @@
 ﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Investigate Report";
+}
+
+<div class="container py-2">
+    <section>
+        <h2 class="display-5 font-weight-bold mb-6 text-center">Report Title</h2>
+
+        <!-- Report Information -->
+        <div class="mb-4">
+            <h3 class="h5 font-weight-semibold mb-2">Report Information</h3>
+            <p class="text-secondary mb-4">
+                This is an example of the description attached to the report this text is literally a placeholder please do not copy this or maybe do copy it if you want some placeholder text i dont know.
+            </p>
+        </div>
+
+        <!-- Image Section -->
+        <div class="row mb-4">
+            <div class="col-md-6 bg-secondary p-4 text-center mb-2 mb-md-0">No Images Available.</div>
+            <div class="col-md-6 bg-secondary p-4">
+                <h3 class="h5 font-weight-semibold mb-2">Report Parameters</h3>
+                <form>
+                    <div class="form-group mb-2">
+                        <label class="font-weight-bold">Date:</label>
+                        <input type="text" class="form-control bg-dark text-white" placeholder="__">
+                    </div>
+                    <div class="form-group mb-2">
+                        <label class="font-weight-bold">People:</label>
+                        <input type="text" class="form-control bg-dark text-white" placeholder="__">
+                    </div>
+                    <div class="form-group mb-2">
+                        <label class="font-weight-bold">Other Parameters:</label>
+                        <input type="text" class="form-control bg-dark text-white" placeholder="__">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Feedback Section -->
+        <div class="bg-secondary p-4 rounded shadow mb-4">
+            <h3 class="h5 font-weight-semibold mb-2">Feedback Box</h3>
+            <textarea class="form-control bg-dark text-white" rows="4" placeholder="We could copy the text box from the UI project here? (With less features) This one will be for feedback."></textarea>
+        </div>
+
+        <!-- Investigation Action Section -->
+        <div class="bg-secondary p-4 rounded shadow mb-4">
+            <h3 class="h5 font-weight-semibold mb-2">Investigation Action</h3>
+            <form>
+                <div class="mb-4">
+                    <label class="font-weight-bold d-block mb-2">Select an action:</label>
+                    <div class="custom-control custom-radio mb-2">
+                        <input type="radio" id="closeInvestigation" name="investigationAction" class="custom-control-input" value="close">
+                        <label class="custom-control-label text-white" for="closeInvestigation">Close the investigation</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-2">
+                        <input type="radio" id="furtherInvestigate" name="investigationAction" class="custom-control-input" value="furtherInvestigate">
+                        <label class="custom-control-label text-white" for="furtherInvestigate">Further investigate</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-2">
+                        <input type="radio" id="noActionRequired" name="investigationAction" class="custom-control-input" value="noActionRequired">
+                        <label class="custom-control-label text-white" for="noActionRequired">No action required</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Action</button>
+            </form>
+        </div>
+
+    </section>
+</div>
