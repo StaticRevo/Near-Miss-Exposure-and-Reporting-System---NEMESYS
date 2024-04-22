@@ -1,9 +1,74 @@
+@model IEnumerable<Report> 
+
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Reports</h1>
+    <form asp-controller="Home" asp-action="Index" method="get">
+    <select name="sortOrder" onchange="this.form.submit()">
+        <option value="">Sort by...</option>
+        <option value="Upvotes">Upvotes</option>
+        <option value="DateOfReport">Date of Report</option>
+    </select>
+</form>
+</div>
+
+<div class="container px-4 py-5">
+
+    @foreach (var report in Model)
+    {
+        <div class="card mb-3" style="max-width: 85vw;">
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                    @if (!string.IsNullOrWhiteSpace(report.ImageUrl))
+                    {
+                        <img src="@report.ImageUrl" class="card-img" alt="Report visual">
+                    }
+                    else
+                    {
+                        <img src="https://placehold.co/300x350" class="card-img" alt="Report visual placeholder">
+                    }
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h3 class="card-title" style="color: #141414;">@report.TitleOfReport</h3>
+                        <p class="card-text text-secondary">
+                            @report.Description
+                        </p>
+                        <p class="card-text" style="font-size: 1.25rem;">
+                            <small class="text-muted">Reported on @report.DateOfReport.ToString("d")</small>
+                        </p>
+                        <div class="d-flex">
+                            <a asp-controller="Report" asp-action="Details" asp-route-id="@report.ReportId" class="btn btn-dark text-secondary py-2 px-4 mr-2">View Report</a>
+                            <a asp-controller="Report" asp-action="InvestigateReport" asp-route-id="@report.ReportId" class="btn btn-dark text-secondary py-2 px-4">Investigate Report</a>
+                            }
+                            @if (User.IsInRole("Investigator"))
+                            {
+                                <a asp-controller="Report" asp-action="InvestigateReport" asp-route-id="@report.ReportId" class="btn btn-dark text-secondary py-2 px-4">Investigate Report</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <form method="post" asp-controller="Report" asp-action="Upvote" asp-route-id="@report.ReportId">
+                            <button type="submit" class="btn">
+                                <i class="fas fa-arrow-up"></i>
+                            </button>
+                        </form>
+                        <span class="text-dark mx-2">@report.Upvotes</span>
+                        <form method="post" asp-controller="Report" asp-action="Downvote" asp-route-id="@report.ReportId">
+                            <button type="submit" class="btn">
+                                <i class="fas fa-arrow-down"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    }
 </div>
 
