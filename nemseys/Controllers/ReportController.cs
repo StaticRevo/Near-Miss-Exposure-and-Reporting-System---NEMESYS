@@ -266,29 +266,59 @@ namespace Nemesys.Controllers
         [Authorize]
         public IActionResult Upvote(int id)
         {
+            var userId = _userManager.GetUserId(User);
             var report = _nemeseysRepository.GetReportById(id);
+
             if (report != null)
             {
+                var cookieKey = $"Upvoted_{id}";
+                if (Request.Cookies[cookieKey] == userId)
+                {
+                    // The user has already voted for this report
+                    TempData["Message"] = "You have already voted for this report.";
+                    return RedirectToAction("Index", "Home");
+                }
+
                 report.Upvotes++;
                 _nemeseysRepository.UpdateReport(report);
+
+                Response.Cookies.Append(cookieKey, userId);
             }
+
             return RedirectToAction("Index", "Home");
-            return RedirectToAction("Index");
         }
+
 
         [HttpPost]
         [Authorize]
         public IActionResult Downvote(int id)
         {
+            var userId = _userManager.GetUserId(User);
             var report = _nemeseysRepository.GetReportById(id);
-            if (report != null && report.Upvotes > 0)
+
+            if (report != null)
             {
-                report.Upvotes--;
-                _nemeseysRepository.UpdateReport(report);
+                var cookieKey = $"Upvoted_{id}";
+                if (Request.Cookies[cookieKey] != userId)
+                {
+                    // The user has already voted for this report
+                    TempData["Message"] = "You have not voted for this report yet.";
+                    return RedirectToAction("Index", "Home");
+
+                }
+
+                if (report.Upvotes > 0)
+                {
+                    report.Upvotes--;
+                    _nemeseysRepository.UpdateReport(report);
+
+                    Response.Cookies.Delete(cookieKey);
+                }
             }
+
             return RedirectToAction("Index", "Home");
-            return RedirectToAction("Index");
         }
+
         // This method responds to GET requests and shows the confirmation page
         [HttpGet]
         [Authorize]
