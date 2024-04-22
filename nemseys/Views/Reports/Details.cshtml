@@ -5,49 +5,56 @@
     ViewData["Title"] = "View Report - " + Model.TitleOfReport;
 }
 
-<div class="container px-4 py-5">
-    <section>
-        <h2 class="display-5 font-weight-bold mb-4 text-center">@Model.TitleOfReport</h2>
+<div class="container my-5 d-flex flex-column" style="min-height: 100vh;">
+    <section class="mb-auto">
+        <!-- Content will push the button down -->
+        <h1 class="display-4 font-weight-bold mb-5 text-center">@Model.TitleOfReport</h1>
 
         <!-- Report Information -->
-        <div class="mb-4">
-            <h3 class="h5 font-weight-semibold mb-3">Report Information</h3>
-            <p class="text-secondary mb-4">@Model.Description</p>
+        <div class="mb-5">
+            <h2 class="h2 font-weight-bold mb-3">Report Information</h2>
+            <p class="text-muted">@Model.Description</p>
         </div>
 
-        <!-- Image Section -->
-        <div class="d-flex mb-4">
-            <div class="flex-fill p-4 mr-2 text-center">
+        <!-- Image and Parameters Section -->
+        <div class="row mb-5">
+            <div class="col-md-6 text-center mb-3 mb-md-0">
                 @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
                 {
-                    <img src="@Model.ImageUrl" alt="Report Image" class="img-fluid" />
+                    <img src="@Model.ImageUrl" alt="Report Image" class="img-thumbnail" />
                 }
                 else
                 {
-                    <div class="bg-secondary p-4">No Images Available.</div>
+                    <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">No Images Available.</div>
                 }
             </div>
-            <div class="flex-fill bg-secondary p-4">
-                <h3 class="h5 font-weight-semibold mb-3">Report Parameters</h3>
-                <div class="text-white bg-dark p-2 mb-2">
+            <div class="col-md-6 bg-light p-4">
+                <h2 class="h2 font-weight-bold mb-4" style="color:#414141;">Report Parameters</h2>
+                <p class="bg-dark text-white p-2 mb-2">
                     <strong>Date of Report:</strong> @Model.DateOfReport.ToString("yyyy-MM-dd")
-                </div>
-                <div class="text-white bg-dark p-2 mb-2">
+                </p>
+                <p class="bg-dark text-white p-2 mb-2">
                     <strong>Hazard Location:</strong> @Model.HazardLocation
-                </div>
-                <div class="text-white bg-dark p-2">
+                </p>
+                <p class="bg-dark text-white p-2">
                     <strong>Type of Hazard:</strong> @Model.TypeOfHazard
-                </div>
+                </p>
             </div>
         </div>
-        <!-- Additional Report Details -->
-        <div>
-            <h3 class="h5 font-weight-semibold">Additional Details</h3>
-            <p><strong>Status:</strong> @Model.Status</p>
-            <p><strong>Spotted On:</strong> @Model.DateAndTimeSpotted.ToString("MMMM dd, yyyy HH:mm")</p>
-            <p><strong>Upvotes:</strong> @Model.Upvotes</p>
-        </div>
-    </section>
-</div>
 
-<a asp-controller="Report" asp-action="Index" class="btn btn-primary">Back to List</a>
+        <!-- Additional Report Details -->
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title h2 font-weight-bold" style="color: #414141;">Additional Details</h2>
+                <p class="card-text" style="color: #414141;"><i class="fas fa-info-circle"></i> <strong>Status:</strong> @Model.Status</p>
+                <p class="card-text" style="color: #414141;"><i class="fas fa-calendar-alt"></i> <strong>Spotted On:</strong> @Model.DateAndTimeSpotted.ToString("MMMM dd, yyyy HH:mm")</p>
+                <p class="card-text" style="color: #414141;"><i class="fas fa-thumbs-up"></i> <strong>Upvotes:</strong> @Model.Upvotes</p>
+            </div>
+        </div>
+
+    </section>
+    <div class="mt-auto text-center">
+        <!-- Center-align the button -->
+        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary rounded-pill btn-lg px-4 py-2" style="font-size: 1.25rem;">Back to List</a>
+    </div>
+</div>
