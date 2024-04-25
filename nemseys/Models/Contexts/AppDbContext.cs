@@ -1,18 +1,20 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration.UserSecrets;
 using Nemesys.Models;
 
 namespace Nemesys.Models.Contexts
 {
-    public class AppDbContext : IdentityDbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            //This will pass any options passed in the constructor to the base class DbContext
+            
         }
 
         public DbSet<Report> Reports { get; set; }
+        public DbSet<Investigation> Investigations { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -22,27 +24,28 @@ namespace Nemesys.Models.Contexts
 
             //Seed roles
             modelBuilder.Entity<IdentityRole>().HasData(
-                new IdentityRole() { Id = "d234f58e-7373-4ee5-98f0-c17892784b05", Name = "Admin", ConcurrencyStamp = "1", NormalizedName = "ADMIN" },
-                new IdentityRole() { Id = "1db56103-a3e2-4edc-afab-abde856cebe0", Name = "User", ConcurrencyStamp = "1", NormalizedName = "USER" }
+                new IdentityRole() { Id = "d234f58e-7373-4ee5-98f0-c17892784b05", Name = "Reporter", ConcurrencyStamp = "1", NormalizedName = "REPORTER" },
+                new IdentityRole() { Id = "1db56103-a3e2-4edc-afab-abde856cebe0", Name = "Investigator", ConcurrencyStamp = "1", NormalizedName = "INVESTIGATOR" }
             );
 
 
             //Seed admin user
-            IdentityUser user = new IdentityUser()
+            ApplicationUser user = new ApplicationUser()
             {
                 Id = "134c1566-3f64-4ab4-b1e7-2ffe11f43e32", //https://www.guidgenerator.com/online-guid-generator.aspx
                 UserName = "admin@mail.com", //Has to be the email address for the login logic to work
                 NormalizedUserName = "ADMIN@MAIL.COM ",
                 Email = "admin@mail.com",
+                AuthorAlias = "Admin",
                 NormalizedEmail = "ADMIN@MAIL.COM",
                 LockoutEnabled = false,
                 EmailConfirmed = true,
                 PhoneNumber = ""
             };
 
-            PasswordHasher<IdentityUser> passwordHasher = new PasswordHasher<IdentityUser>();
+            PasswordHasher<ApplicationUser> passwordHasher = new PasswordHasher<ApplicationUser>();
             user.PasswordHash = passwordHasher.HashPassword(user, "S@fePassw0rd1"); //make sure you adhere to policies (incl confirmed etc…)
-            modelBuilder.Entity<IdentityUser>().HasData(user);
+            modelBuilder.Entity<ApplicationUser>().HasData(user);
 
             //Assign existing user to the admin role
             modelBuilder.Entity<IdentityUserRole<string>>().HasData(
@@ -54,6 +57,7 @@ namespace Nemesys.Models.Contexts
                new Report
                {
                    ReportId = 1,
+                   UserId = "134c1566-3f64-4ab4-b1e7-2ffe11f43e32",
                    DateOfReport = DateTime.UtcNow,
                    HazardLocation = "Conference Room B",
                    DateAndTimeSpotted = DateTime.UtcNow,
@@ -67,6 +71,7 @@ namespace Nemesys.Models.Contexts
                new Report
                {
                    ReportId = 2,
+                   UserId = "134c1566-3f64-4ab4-b1e7-2ffe11f43e32",
                    DateOfReport = DateTime.UtcNow.AddDays(-1),
                    HazardLocation = "Main Street",
                    DateAndTimeSpotted = DateTime.UtcNow.AddDays(-1),
@@ -80,6 +85,7 @@ namespace Nemesys.Models.Contexts
                new Report
                {
                    ReportId = 3,
+                   UserId = "134c1566-3f64-4ab4-b1e7-2ffe11f43e32",
                    DateOfReport = DateTime.UtcNow.AddDays(-2),
                    HazardLocation = "Local Park",
                    DateAndTimeSpotted = DateTime.UtcNow.AddDays(-2),
