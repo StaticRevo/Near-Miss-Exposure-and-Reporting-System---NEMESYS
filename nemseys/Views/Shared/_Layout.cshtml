@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>@ViewData["Title"] - Nemesis</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!--<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />-->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Nemesis.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
@@ -19,11 +19,19 @@
             <a asp-controller="Home" asp-action="Index" class="h2 font-weight-bold text-light text-decoration-none">Nemesys</a>
             <div class="d-flex align-items-center">
 
-                <a asp-controller="Home" asp-action="MyReports" class="@(ViewContext.RouteData.Values["action"].ToString() == "MyReports" ? "active-link" : "text-light") hover:text-white mr-3">My Reports</a>
-                <a asp-controller="Report" asp-action="Create" class="@(ViewContext.RouteData.Values["action"].ToString() == "Create" && ViewContext.RouteData.Values["controller"].ToString() == "Reports" ? "active-link" : "text-light") hover:text-white mr-3">Log Report</a>
-                <a asp-controller="Home" asp-action="HallOfFame" class="@(ViewContext.RouteData.Values["action"].ToString() == "HallOfFame" ? "active-link" : "text-light") hover:text-white mr-3">Hall Of Fame</a>
+                <a asp-controller="Report" asp-action="Create" class="h5 text-white hover:text-white mr-3">Log Report</a>
+                @if (User.IsInRole("Reporter"))
+                {
+                    <!-- If user has reporter role-->
+                    <a asp-controller="Report" asp-action="MyReports" class="h5 text-white hover:text-white mr-3">My Reports</a>
+                }
+                @if (User.IsInRole("Investigator"))
+                {
+                    <!-- If user has investigator role-->
+                    <a asp-controller="Investigation" asp-action="MyInvestigations" class="h5 text-white hover:text-white mr-3">My Investigations</a>
+                }
 
-                @await Html.PartialAsync("_LoginPartial")
+                <a asp-controller="Home" asp-action="HallOfFame" class="h5 text-white hover:text-white mr-3">Hall Of Fame</a>
 
                 <!-- Profile Icon with Dropdown -->
                 <div class="dropdown">
@@ -31,18 +39,10 @@
                         <i class="fas fa-user-circle fa-2x"></i>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="profileMenuButton">
-                        @if (!User.Identity.IsAuthenticated)
-                        {
-                            <li><a asp-controller="Home" asp-action="SignIn" class="dropdown-item">Sign In</a></li>
-                            <li><a asp-controller="Home" asp-action="Register" class="dropdown-item">Register</a></li>
-                        }
-                        else
-                        {
-                            <li><a asp-controller="Account" asp-action="Logout" class="dropdown-item">Log Out</a></li>
-                        }
-                        <li><a asp-controller="Home" asp-action="Profile" class="dropdown-item">Profile</a></li>
+                        @await Html.PartialAsync("_LoginPartial")
                     </ul>
                 </div>
+
             </div>
         }
     </header>
