@@ -1,0 +1,6 @@
+namespace Nemesys.ViewModels
+{
+    public class InvestigationListViewModel
+    {
+    }
+}
