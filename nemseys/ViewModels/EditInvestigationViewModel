@@ -1,0 +1,44 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace Nemesys.ViewModels
+{
+    public class EditInvestigationViewModel
+    {
+        public int InvestigationId { get; set; }
+
+        [Required]
+        public int ReportId { get; set; }
+
+        [Required]
+        [MaxLength(255)]
+        public string Title { get; set; } // Title of the investigation
+
+        [Required]
+        public string Description { get; set; } // Description of the investigation
+
+        [Required]
+        public DateTime DateOfAction { get; set; }
+
+        [Required]
+        [MaxLength(50)]
+        public string Status { get; set; } // Current status of the investigation
+
+        [Required]
+        [MaxLength(50)]
+        public string Outcome { get; set; } // Outcome of the investigation
+
+        [Required]
+        public string UserId { get; set; } // ID of the investigator handling the case
+
+        // Properties from Report
+        public DateTime DateOfReport { get; set; }
+        public string HazardLocation { get; set; }
+        public DateTime DateAndTimeSpotted { get; set; }
+        public string TypeOfHazard { get; set; }
+        public string TitleOfReport { get; set; }
+        public string ReportDescription { get; set; }
+        public string ReportStatus { get; set; }
+        public string ImageUrl { get; set; }
+    }
+}
