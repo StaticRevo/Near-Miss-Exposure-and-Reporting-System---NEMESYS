@@ -1,3 +1,4 @@
+
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.ComponentModel;
@@ -36,8 +37,9 @@ namespace Nemesys.Models
 
         public int Upvotes { get; set; }
 
+
         //Foreign Key - Navigation property
         public string UserId { get; set; }
-        public IdentityUser User { get; set; }
+        public ApplicationUser User { get; set; }
     }
 }
