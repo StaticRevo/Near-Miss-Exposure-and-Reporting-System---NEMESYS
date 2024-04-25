@@ -7,5 +7,12 @@ namespace Nemesys.Models.Interfaces
         void CreateReport(Report report);
         void UpdateReport(Report updatedReport);
         void DeleteReport(Report report);
+
+        IEnumerable<Investigation> GetAllInvestigations();
+        Investigation GetInvestigationById(int investigationId);
+        void CreateInvestigation(Investigation investigation);
+        void UpdateInvestigation(Investigation updatedInvestigation);
+        void DeleteInvestigation(Investigation investigation);
+
     }
 }
