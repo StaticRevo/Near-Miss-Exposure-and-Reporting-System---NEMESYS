@@ -1,4 +1,6 @@
-﻿
+@model Nemesys.ViewModels.EditInvestigationViewModel
+@using Microsoft.AspNetCore.Mvc.Rendering
+
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Investigate Report";
@@ -6,66 +8,89 @@
 
 <div class="container py-2">
     <section>
-        <h2 class="display-5 font-weight-bold mb-6 text-center">Report Title</h2>
+        <h1 class="display-5 font-weight-bold mb-6 text-center">@Model.TitleOfReport</h1>
 
-        <!-- Report Information -->
-        <div class="mb-4">
-            <h3 class="h5 font-weight-semibold mb-2">Report Information</h3>
-            <p class="text-secondary mb-4">
-                This is an example of the description attached to the report this text is literally a placeholder please do not copy this or maybe do copy it if you want some placeholder text i dont know.
-            </p>
+         <!-- Report Information -->
+        <div class="mb-4 text-center">
+            <h1 class="h1 font-weight-semibold mb-2">Report Information</h1>
         </div>
 
         <!-- Image Section -->
         <div class="row mb-4">
-            <div class="col-md-6 bg-secondary p-4 text-center mb-2 mb-md-0">No Images Available.</div>
+            <div class="col-md-6 bg-secondary p-4 text-center mb-2 mb-md-0">
+                <img src="@Model.ImageUrl" alt="Report Image" style="width: 100%; height: 100%; object-fit: cover;" />
+            </div>
             <div class="col-md-6 bg-secondary p-4">
-                <h3 class="h5 font-weight-semibold mb-2">Report Parameters</h3>
+                <h3 class="h3 font-weight-semibold mb-2">Report Parameters</h3>
                 <form>
                     <div class="form-group mb-2">
-                        <label class="font-weight-bold">Date:</label>
-                        <input type="text" class="form-control bg-dark text-white" placeholder="__">
+                        <label class="font-weight-bold">Date Of Report:</label>
+                        <input type="text" class="form-control bg-dark text-white" value="@Model.DateOfReport" readonly>
                     </div>
                     <div class="form-group mb-2">
-                        <label class="font-weight-bold">People:</label>
-                        <input type="text" class="form-control bg-dark text-white" placeholder="__">
+                        <label class="font-weight-bold">Hazard Location:</label>
+                        <input type="text" class="form-control bg-dark text-white" value="@Model.HazardLocation" readonly>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label class="font-weight-bold">Date and Time Spotted:</label>
+                        <input type="text" class="form-control bg-dark text-white" value="@Model.DateAndTimeSpotted" readonly>
                     </div>
                     <div class="form-group mb-2">
-                        <label class="font-weight-bold">Other Parameters:</label>
-                        <input type="text" class="form-control bg-dark text-white" placeholder="__">
+                        <label class="font-weight-bold">Type Of Hazard:</label>
+                        <input type="text" class="form-control bg-dark text-white" value="@Model.TypeOfHazard" readonly>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label class="font-weight-bold">Report Status:</label>
+                        <input type="text" class="form-control bg-dark text-white" value="@Model.ReportStatus" readonly>
                     </div>
                 </form>
             </div>
         </div>
 
-        <!-- Feedback Section -->
-        <div class="bg-secondary p-4 rounded shadow mb-4">
-            <h3 class="h5 font-weight-semibold mb-2">Feedback Box</h3>
-            <textarea class="form-control bg-dark text-white" rows="4" placeholder="We could copy the text box from the UI project here? (With less features) This one will be for feedback."></textarea>
+        <!-- Investigation Section -->
+        <div class="mb-4 text-center">
+            <h2 class="h2 font-weight-semibold mb-2">Investigation Section</h2>
         </div>
 
-        <!-- Investigation Action Section -->
-        <div class="bg-secondary p-4 rounded shadow mb-4">
-            <h3 class="h5 font-weight-semibold mb-2">Investigation Action</h3>
-            <form>
-                <div class="mb-4">
-                    <label class="font-weight-bold d-block mb-2">Select an action:</label>
-                    <div class="custom-control custom-radio mb-2">
-                        <input type="radio" id="closeInvestigation" name="investigationAction" class="custom-control-input" value="close">
-                        <label class="custom-control-label text-white" for="closeInvestigation">Close the investigation</label>
-                    </div>
-                    <div class="custom-control custom-radio mb-2">
-                        <input type="radio" id="furtherInvestigate" name="investigationAction" class="custom-control-input" value="furtherInvestigate">
-                        <label class="custom-control-label text-white" for="furtherInvestigate">Further investigate</label>
-                    </div>
-                    <div class="custom-control custom-radio mb-2">
-                        <input type="radio" id="noActionRequired" name="investigationAction" class="custom-control-input" value="noActionRequired">
-                        <label class="custom-control-label text-white" for="noActionRequired">No action required</label>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit Action</button>
-            </form>
-        </div>
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <!-- Investigation Title -->
+            <div class="form-group mb-3">
+                <label for="investigationTitle" class="font-weight-bold">Investigation Title:</label>
+                <input type="text" id="investigationTitle" name="InvestigationTitle" class="form-control" placeholder="Enter investigation title" required>
+            </div>
 
+            <!-- Date of Action -->
+            <div class="form-group mb-3">
+                <label for="dateOfAction" class="font-weight-bold">Date of Action:</label>
+                <input type="date" id="dateOfAction" name="DateOfAction" class="form-control" required>
+            </div>
+
+            <!-- Outcome (Action) -->
+            <div class="form-group mb-3">
+                <label for="outcomeAction" class="font-weight-bold">Outcome (Action):</label>
+                <select id="outcomeAction" name="OutcomeAction" class="form-control" required>
+                    <option value="">Select an outcome</option>
+                    <option value="Resolved">Resolved</option>
+                    <option value="Unresolved">Unresolved</option>
+                    <option value="Escalated">Escalated</option>
+                </select>
+            </div>
+
+            <!-- Feedback -->
+            <div class="form-group mb-4">
+                <label for="feedback" class="font-weight-bold">Feedback:</label>
+                <textarea id="feedback" name="Feedback" class="form-control" rows="4" placeholder="Enter your feedback"></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-flex justify-content-center">
+                <input type="submit" class="btn btn-primary" value="Submit Report" />
+                <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Back to list</a>
+            </div>
+        </form>
     </section>
 </div>
+
+  
