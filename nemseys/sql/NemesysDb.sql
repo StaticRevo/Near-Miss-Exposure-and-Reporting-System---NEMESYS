@@ -37,11 +37,15 @@ CREATE TABLE Reports (
 
 -- Create Investigations table
 CREATE TABLE Investigations (
-    InvestigationId INT PRIMARY KEY IDENTITY,
-    ReportId INT NOT NULL,
-    Description NVARCHAR(MAX) NOT NULL,
-    DateOfAction DATETIME NOT NULL,
-    InvestigatorId INT NOT NULL,
+    InvestigationId INT PRIMARY KEY IDENTITY, 
+    ReportId INT NOT NULL,                    
+    Title NVARCHAR(255) NOT NULL,             
+    Description NVARCHAR(MAX) NOT NULL,      
+    DateOfAction DATETIME NOT NULL,          
+    CurrentStatus NVARCHAR(50) NOT NULL,    
+    Outcome NVARCHAR(50) CHECK (Outcome IN ('Closed', 'Further Investigation', 'No Action Required')), 
+    InvestigatorId INT NOT NULL,            
     FOREIGN KEY (ReportId) REFERENCES Reports(ReportId),
-    FOREIGN KEY (InvestigatorId) REFERENCES Profiles(ProfileId)
+    FOREIGN KEY (InvestigatorId) REFERENCES Users(UserId) 
 );
+
