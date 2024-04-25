@@ -12,13 +12,15 @@ namespace Nemesys.Controllers
     public class ReportController : Controller
     {
         private readonly INemeseysRepository _nemeseysRepository;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ReportController(INemeseysRepository nemeseysRepository, UserManager<IdentityUser> userManager)
+        public ReportController(INemeseysRepository nemeseysRepository, UserManager<ApplicationUser> userManager)
         {
             _nemeseysRepository = nemeseysRepository;
             _userManager = userManager;
         }
+
+        [HttpPost]
         public IActionResult Index()
         {
             var reports = _nemeseysRepository.GetAllReports().OrderByDescending(b => b.DateOfReport);
@@ -81,7 +83,8 @@ namespace Nemesys.Controllers
                 return View(model);
             }
         }
-        [Authorize]
+
+        [Authorize(Roles = "Reporter")]
         [HttpGet]
         public IActionResult Create()
         {
@@ -95,14 +98,15 @@ namespace Nemesys.Controllers
             return View(model);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Reporter")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("TitleOfReport, Description, ImageToUpload, DateOfReport, HazardLocation, DateAndTimeSpotted, TypeOfHazard, Status")] EditReportViewModel newReport)
         {
             if (ModelState.IsValid)
             {
                 string fileName = "";
-                if (newReport.ImageToUpload != null)
+                if (newReport.ImageToUpload != null && newReport.ImageToUpload.Length > 0)
                 {
                     // Check for file aspects such as size, extension, etc., and store with a unique name (e.g., GUID)
                     var extension = "." + newReport.ImageToUpload.FileName.Split('.')[newReport.ImageToUpload.FileName.Split('.').Length - 1];
@@ -113,6 +117,10 @@ namespace Nemesys.Controllers
                         newReport.ImageToUpload.CopyTo(bits);
                     }
                     newReport.ImageUrl = "/images/reports/" + fileName; // Set the ImageUrl to the new file path
+                }
+                else
+                {
+                    newReport.ImageUrl = "/images/reports/default.jpg"; // replace with your actual default image path
                 }
 
                 Report report = new Report()
@@ -131,7 +139,7 @@ namespace Nemesys.Controllers
 
                 // Persist to repository
                 _nemeseysRepository.CreateReport(report);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             else
             {
@@ -192,9 +200,7 @@ namespace Nemesys.Controllers
                 {
                     if (updatedReport.ImageToUpload != null)
                     {
-                        string fileName = "";
-                        // At this point, you should check file size, extension, etc.
-                        // Then persist using a new name for consistency (e.g., new Guid)
+                        string fileName = "";   
                         var extension = "." + updatedReport.ImageToUpload.FileName.Split('.')[updatedReport.ImageToUpload.FileName.Split('.').Length - 1];
                         fileName = Guid.NewGuid().ToString() + extension;
                         var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "reports", fileName);
@@ -359,7 +365,7 @@ namespace Nemesys.Controllers
             if (report.UserId == currentUserId)
             {
                 _nemeseysRepository.DeleteReport(report);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             else
             {
