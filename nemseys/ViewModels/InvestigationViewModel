@@ -1,0 +1,29 @@
+using Nemesys.Models;
+using System.ComponentModel.DataAnnotations;
+
+public class InvestigationViewModel
+{
+    public int ReportId { get; set; }
+
+    [Required]
+    [MaxLength(255)]
+    public string Title { get; set; } // Title of the investigation
+
+    [Required]
+    public string Description { get; set; } // Description of the investigation
+
+    [Required]
+    public DateTime DateOfAction { get; set; }
+
+    [Required]
+    [MaxLength(50)]
+    public string Status { get; set; } // Current status of the investigation
+
+    [Required]
+    [MaxLength(50)]
+    public string Outcome { get; set; } // Outcome of the investigation
+
+    //Foreign Key - Navigation property
+    public string UserId { get; set; }
+    public Report Report { get; set; } // Assuming you have a Report entity
+}
