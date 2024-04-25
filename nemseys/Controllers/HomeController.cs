@@ -3,15 +3,16 @@ using Nemesys.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Nemesys.Models;
 
 namespace Nemesys.Controllers;
 
 public class HomeController : Controller
 {
     private readonly INemeseysRepository _nemeseysRepository;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public HomeController(INemeseysRepository bloggyRepository, UserManager<IdentityUser> userManager)
+    public HomeController(INemeseysRepository bloggyRepository, UserManager<ApplicationUser> userManager)
     {
         _nemeseysRepository = bloggyRepository;
         _userManager = userManager;
