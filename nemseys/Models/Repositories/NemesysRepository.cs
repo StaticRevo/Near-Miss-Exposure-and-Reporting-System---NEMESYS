@@ -2,6 +2,7 @@ using Nemesys.Models.Contexts;
 using Nemesys.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Nemesys.Models.Contexts;
+using System.Composition;
 
 namespace Nemesys.Models.Repositories
 {
@@ -51,6 +52,47 @@ namespace Nemesys.Models.Repositories
             _appDbContext.Reports.Remove(report);
             _appDbContext.SaveChanges();
         }
+
+
+        // Investigation Section
+        public IEnumerable<Investigation> GetAllInvestigations()
+        {
+            return _appDbContext.Investigations.OrderBy(investigation => investigation.DateOfAction);
+        }
+
+        public Investigation GetInvestigationById(int investigationId)
+        {
+            return _appDbContext.Investigations.FirstOrDefault(p => p.InvestigationId == investigationId);
+        }
+
+        public void CreateInvestigation(Investigation investigation)
+        {
+            _appDbContext.Investigations.Add(investigation);
+            _appDbContext.SaveChanges();
+        }
+        public void UpdateInvestigation(Investigation investigation)
+        {
+            var existingInvestigation = _appDbContext.Investigations.SingleOrDefault(i => i.InvestigationId == investigation.InvestigationId);
+            if (existingInvestigation != null)
+            {
+                // Update properties
+                existingInvestigation.InvestigationTitle = investigation.InvestigationTitle;
+                existingInvestigation.Feedback = investigation.Feedback;
+                existingInvestigation.DateOfAction = investigation.DateOfAction;
+                existingInvestigation.Status = investigation.Status;
+                existingInvestigation.Outcome = investigation.Outcome;
+                existingInvestigation.UserId = investigation.UserId;
+
+                _appDbContext.Entry(existingInvestigation).State = EntityState.Modified;
+                _appDbContext.SaveChanges();
+            }
+        }
+        public void DeleteInvestigation(Investigation investigation)
+        {
+            _appDbContext.Investigations.Remove(investigation);
+            _appDbContext.SaveChanges();
+        }
+
 
     }
 }
