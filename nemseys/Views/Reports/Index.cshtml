@@ -7,7 +7,12 @@
 
 <div class="container px-4 py-5">
     <h2>Showing @Model.TotalEntries Reports</h2>
-
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-info">
+            @TempData["Message"]
+        </div>
+    }
     @foreach (var report in Model.Reports)
     {
         <div class="card mb-3" style="max-width: 85vw;">
