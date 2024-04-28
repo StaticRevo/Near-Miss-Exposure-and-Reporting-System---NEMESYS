@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Nemesys.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Nemesys.Controllers;
 
@@ -73,10 +74,15 @@ public class HomeController : Controller
 
 
 
-    public IActionResult HallOfFame()
+    public async Task<IActionResult> HallOfFame()
     {
-        return View();
+        var reporters = await _userManager.Users
+            .OrderByDescending(u => u.ClosedReportsCount)
+            .ToListAsync();
+
+        return View(reporters);
     }
+
 
     public class ModelBindingTest
     {
