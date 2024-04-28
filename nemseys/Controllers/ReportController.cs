@@ -139,6 +139,7 @@ namespace Nemesys.Controllers
 
                 // Persist to repository
                 _nemeseysRepository.CreateReport(report);
+                TempData["Message"] = "Report created successfully!";
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -221,7 +222,8 @@ namespace Nemesys.Controllers
                     reportToUpdate.Status = updatedReport.Status;
 
                     _nemeseysRepository.UpdateReport(reportToUpdate);
-                    return RedirectToAction("Index");
+                    TempData["Message"] = "Changes saved successfully!";
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
