@@ -9,6 +9,8 @@
 <div class="container py-2">
     <section>
         <h1 class="display-5 font-weight-bold mb-6 text-center">@Model.TitleOfReport</h1>
+        <p class="font-weight-bold mb-6 text-center">@Model.ReportDescription</p>
+
 
          <!-- Report Information -->
         <div class="mb-4 text-center">
@@ -55,6 +57,16 @@
 
         <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="All" class="text-danger"></div>
+            <!-- Hidden fields -->
+            <input type="hidden" asp-for="Status" />
+            <input type="hidden" asp-for="HazardLocation" />
+            <input type="hidden" asp-for="TypeOfHazard" />
+            <input type="hidden" asp-for="TitleOfReport" />
+            <input type="hidden" asp-for="ReportDescription" />
+            <input type="hidden" asp-for="ReportStatus" />
+            <input type="hidden" asp-for="ImageUrl" />
+            @Html.HiddenFor(model => model.ReportId)
+
             <!-- Investigation Title -->
             <div class="form-group mb-3">
                 <label for="investigationTitle" class="font-weight-bold">Investigation Title:</label>
@@ -67,10 +79,10 @@
                 <input type="date" id="dateOfAction" name="DateOfAction" class="form-control" required>
             </div>
 
-            <!-- Outcome (Action) -->
+            <!-- Outcome -->
             <div class="form-group mb-3">
-                <label for="outcomeAction" class="font-weight-bold">Outcome (Action):</label>
-                <select id="outcomeAction" name="OutcomeAction" class="form-control" required>
+                <label for="outcome" class="font-weight-bold">Outcome:</label>
+                <select id="outcome" name="Outcome" class="form-control" required>
                     <option value="">Select an outcome</option>
                     <option value="Resolved">Resolved</option>
                     <option value="Unresolved">Unresolved</option>
