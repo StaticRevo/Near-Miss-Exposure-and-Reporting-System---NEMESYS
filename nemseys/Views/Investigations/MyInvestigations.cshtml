@@ -4,3 +4,65 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Investigations";
 }
+
+<div class="container px-4 py-5">
+    <h2 class="mb-4">Showing @Model.TotalEntries Investigations</h2>
+
+    @foreach (var investigation in Model.Investigations)
+    {
+        <div class="card mb-3" style="max-width: 85vw;">
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                    @if (!string.IsNullOrWhiteSpace(investigation.ImageUrl))
+                    {
+                        <img src="@investigation.ImageUrl" class="card-img" alt="Report visual">
+                    }
+                    else
+                    {
+                        <img src="https://placehold.co/300x350" class="card-img" alt="Report visual placeholder">
+                    }
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <div>
+                            <h3 class="card-title" style="color: #141414;">Investigation Title: @investigation.InvestigationTitle</h3>
+                            <p class="card-text text-secondary">
+                                Feedback: @investigation.Feedback
+                            </p>
+                            <div class="d-flex">
+                                <a asp-controller="Investigation" asp-action="Details" asp-route-id="@investigation.InvestigationId" class="btn btn-dark text-secondary py-2 px-4 mr-2">View Investigation</a>
+                                <a asp-controller="Investigation" asp-action="Edit" asp-route-id="@investigation.InvestigationId" class="btn btn-dark text-secondary py-2 px-4 mr-2">Edit Investigation</a>
+                                <a asp-controller="Investigation" asp-action="Delete" asp-route-id="@investigation.InvestigationId" class="btn btn-dark text-secondary py-2 px-4 mr-2">Delete Investigation</a>
+                            </div>
+                        </div>
+                        <hr /> <!-- Add a horizontal line to separate investigation and report details -->
+                        <div>
+                            <h3 class="card-title" style="color: #141414;">Report Information</h3>
+                            <p class="card-text text-secondary">
+                                Report Title: @investigation.TitleOfReport
+                            </p>
+                            <p class="card-text text-secondary">
+                                Report Description: @investigation.ReportDescription
+                            </p>
+                            <p class="card-text text-secondary">
+                                Date Of Report: @investigation.DateOfReport
+                            </p>
+                            <p class="card-text text-secondary">
+                                Hazard Location: @investigation.HazardLocation
+                            </p>
+                            <p class="card-text text-secondary">
+                                Date And Time Spotted: @investigation.DateAndTimeSpotted
+                            </p>
+                            <p class="card-text text-secondary">
+                                Type Of Hazard: @investigation.TypeOfHazard
+                            </p>
+                            <p class="card-text text-secondary">
+                                Report Status: @investigation.ReportStatus
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
