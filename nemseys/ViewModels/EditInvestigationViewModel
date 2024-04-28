@@ -7,38 +7,57 @@ namespace Nemesys.ViewModels
     {
         public int InvestigationId { get; set; }
 
-        [Required]
         public int ReportId { get; set; }
 
-        [Required]
-        [MaxLength(255)]
-        public string Title { get; set; } // Title of the investigation
+        [Required(ErrorMessage = "Investigation title is required")]
+        [MaxLength(255, ErrorMessage = "Investigation title cannot exceed 255 characters")]
+        [Display(Name = "Investigation Title")]
+        public string InvestigationTitle { get; set; } // Title of the investigation
 
-        [Required]
-        public string Description { get; set; } // Description of the investigation
+        [Required(ErrorMessage = "Feedback is required")]
+        [Display(Name = "Feedback")]
+        public string Feedback { get; set; } // Description of the investigation
 
-        [Required]
+        [Required(ErrorMessage = "Date of action is required")]
+        [DataType(DataType.DateTime)]
+        [Display(Name = "Date of Action")]
         public DateTime DateOfAction { get; set; }
 
-        [Required]
-        [MaxLength(50)]
+        [Required(ErrorMessage = "Status is required")]
+        [MaxLength(50, ErrorMessage = "Status cannot exceed 50 characters")]
+        [Display(Name = "Status")]
         public string Status { get; set; } // Current status of the investigation
 
-        [Required]
-        [MaxLength(50)]
+        [Required(ErrorMessage = "Outcome is required")]
+        [StringLength(50)]
+        [Display(Name = "Outcome")]
         public string Outcome { get; set; } // Outcome of the investigation
 
-        [Required]
-        public string UserId { get; set; } // ID of the investigator handling the case
-
         // Properties from Report
+        [DataType(DataType.DateTime)]
+        [Display(Name = "Date of Report")]
         public DateTime DateOfReport { get; set; }
+
+        [Display(Name = "Hazard Location")]
         public string HazardLocation { get; set; }
+
+        [DataType(DataType.DateTime)]
+        [Display(Name = "Date and Time Spotted")]
         public DateTime DateAndTimeSpotted { get; set; }
+
+        [Display(Name = "Type of Hazard")]
         public string TypeOfHazard { get; set; }
+
+        [Display(Name = "Title of Report")]
         public string TitleOfReport { get; set; }
+
+        [Display(Name = "Report Description")]
         public string ReportDescription { get; set; }
+
+        [Display(Name = "Report Status")]
         public string ReportStatus { get; set; }
+
+        [Display(Name = "Image URL")]
         public string ImageUrl { get; set; }
     }
 }
