@@ -1,0 +1,65 @@
+using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace Nemesys.Migrations
+{
+    /// <inheritdoc />
+    public partial class AddInvestigationTable : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.CreateTable(
+                name: "Investigations",
+                columns: table => new
+                {
+                    InvestigationId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ReportId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    InvestigationTitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Feedback = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateOfAction = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Outcome = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Investigations", x => x.InvestigationId);
+                    table.ForeignKey(
+                        name: "FK_Investigations_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Investigations_Reports_ReportId",
+                        column: x => x.ReportId,
+                        principalTable: "Reports",
+                        principalColumn: "ReportId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Investigations_ReportId",
+                table: "Investigations",
+                column: "ReportId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Investigations_UserId",
+                table: "Investigations",
+                column: "UserId");
+        }
+        /// <inheritdoc />
+
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "Investigations");
+        }
+
+
+    }
+}
