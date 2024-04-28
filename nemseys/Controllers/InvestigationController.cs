@@ -116,7 +116,7 @@ namespace Nemesys.Controllers
         [Authorize(Roles = "Investigator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(EditInvestigationViewModel newInvestigation)
+        public async Task<IActionResult> Create(EditInvestigationViewModel newInvestigation)
         {
             _logger.LogInformation("Create POST method called");
             if (ModelState.IsValid)
@@ -147,6 +147,14 @@ namespace Nemesys.Controllers
                 {
                     case "Resolved":
                         report.Status = "Resolved";
+                        // Retrieve the user who closed the report
+                        var user = await _userManager.GetUserAsync(User);
+
+                        // Increment the user's closed reports count
+                        user.ClosedReportsCount++;
+
+                        // Save the changes to the user
+                        await _userManager.UpdateAsync(user);
                         break;
                     case "Unresolved":
                         report.Status = "Under Review";
@@ -234,7 +242,7 @@ namespace Nemesys.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult Edit(int id, EditInvestigationViewModel updatedInvestigation)
+        public async Task<IActionResult> Edit(int id, EditInvestigationViewModel updatedInvestigation)
         {
             var investigationToUpdate = _nemeseysRepository.GetInvestigationById(id);
             if (investigationToUpdate == null)
@@ -262,7 +270,14 @@ namespace Nemesys.Controllers
                         switch (updatedInvestigation.Outcome)
                         {
                             case "Resolved":
-                                report.Status = "Resolved";
+                                // Retrieve the user who closed the report
+                                var user = await _userManager.GetUserAsync(User);
+
+                                // Increment the user's closed reports count
+                                user.ClosedReportsCount++;
+
+                                // Save the changes to the user
+                                await _userManager.UpdateAsync(user);
                                 break;
                             case "Unresolved":
                             case "Escalated":
@@ -377,6 +392,7 @@ namespace Nemesys.Controllers
             if (investigation.UserId == currentUserId)
             {
                 _nemeseysRepository.DeleteInvestigation(investigation);
+                TempData["Message"] = "Successfully Deleted The Investigation!";
                 return RedirectToAction("Index", "Home");
             }
             else
