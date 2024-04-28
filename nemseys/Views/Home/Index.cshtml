@@ -5,15 +5,27 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4 mb-4">Reports</h1>
-    <form asp-controller="Home" asp-action="Index" method="get">
-        <select name="sortOrder" onchange="this.form.submit()">
-            <option value="">Sort by...</option>
+    <h1 class="display-4 mb-4" style="font-size: 5em; font-weight: bold;">Reports</h1>
+</div>
+
+<div class="d-flex justify-content-center">
+    <form asp-controller="Home" asp-action="Index" method="get" class="form-inline my-2 my-lg-0">
+        <label for="sortOrder" class="mr-2">Sort by:</label>
+        <select name="sortOrder" onchange="this.form.submit()" class="form-control mr-sm-2">
+            <option value="">Select...</option>
             <option value="Upvotes">Upvotes</option>
             <option value="DateOfReport">Date of Report</option>
         </select>
+        <label for="status" class="mr-2">Status:</label>
+        <select name="status" onchange="this.form.submit()" class="form-control mr-sm-2">
+            <option value="All">All</option>
+            <option value="Reported">Reported</option>
+            <option value="Under Review">Under Review</option>
+            <option value="Resolved">Resolved</option>
+        </select>
     </form>
 </div>
+
 
 <div class="container px-4 py-5">
     @if (TempData["Message"] != null)
@@ -22,7 +34,9 @@
             @TempData["Message"]
         </div>
     }
-    @foreach (var report in Model)
+    <hr style="border-color: white;" />
+    <h1 class="display-4 mb-4">Reported</h1>
+    @foreach (var report in Model.Where(r => r.Status == "Reported"))
     {
         <div class="card mb-4" style="max-width: 85vw;">
             <div class="row no-gutters">
@@ -45,10 +59,123 @@
                         <p class="card-text" style="font-size: 1.25rem;">
                             <small class="text-muted">Reported on @report.DateOfReport.ToString("d")</small>
                         </p>
-                            <p class="card-text">
-                                <small class="text-muted">Status: @report.Status</small>
+                        <p class="card-text">
+                            <small class="text-muted">Status: @report.Status</small>
 
-                            </p>
+                        </p>
+                        <div class="d-flex">
+                            <a asp-controller="Report" asp-action="Details" asp-route-id="@report.ReportId" class="btn btn-dark text-secondary py-2 px-4 mr-2">View Report</a>
+                            @if (User.IsInRole("Investigator"))
+                            {
+                                <a asp-controller="Investigation" asp-action="Create" asp-route-id="@report.ReportId" class="btn btn-dark text-secondary py-2 px-4">Investigate Report</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <form method="post" asp-controller="Report" asp-action="Upvote" asp-route-id="@report.ReportId">
+                            <button type="submit" class="btn">
+                                <i class="fas fa-arrow-up"></i>
+                            </button>
+                        </form>
+                        <span class="text-dark mx-2">@report.Upvotes</span>
+                        <form method="post" asp-controller="Report" asp-action="Downvote" asp-route-id="@report.ReportId">
+                            <button type="submit" class="btn">
+                                <i class="fas fa-arrow-down"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+   
+    <hr style="border-color: white;" />
+    <h1 class="display-4 mb-4">Under Review</h1>
+    @foreach (var report in Model.Where(r => r.Status == "Under Review"))
+    {
+        <div class="card mb-4" style="max-width: 85vw;">
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                    @if (!string.IsNullOrWhiteSpace(report.ImageUrl))
+                    {
+                        <img src="@report.ImageUrl" class="card-img" alt="Report visual">
+                    }
+                    else
+                    {
+                        <img src="https://placehold.co/300x350" class="card-img" alt="Report visual placeholder">
+                    }
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h3 class="card-title" style="color: #141414;">@report.TitleOfReport</h3>
+                        <p class="card-text text-secondary">
+                            @report.Description
+                        </p>
+                        <p class="card-text" style="font-size: 1.25rem;">
+                            <small class="text-muted">Reported on @report.DateOfReport.ToString("d")</small>
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">Status: @report.Status</small>
+
+                        </p>
+                        <div class="d-flex">
+                            <a asp-controller="Report" asp-action="Details" asp-route-id="@report.ReportId" class="btn btn-dark text-secondary py-2 px-4 mr-2">View Report</a>
+                            @if (User.IsInRole("Investigator"))
+                            {
+                                <a asp-controller="Investigation" asp-action="Create" asp-route-id="@report.ReportId" class="btn btn-dark text-secondary py-2 px-4">Investigate Report</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <form method="post" asp-controller="Report" asp-action="Upvote" asp-route-id="@report.ReportId">
+                            <button type="submit" class="btn">
+                                <i class="fas fa-arrow-up"></i>
+                            </button>
+                        </form>
+                        <span class="text-dark mx-2">@report.Upvotes</span>
+                        <form method="post" asp-controller="Report" asp-action="Downvote" asp-route-id="@report.ReportId">
+                            <button type="submit" class="btn">
+                                <i class="fas fa-arrow-down"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <hr style="border-color: white;" />
+    <h1 class="display-4 mb-4">Resolved</h1>
+    @foreach (var report in Model.Where(r => r.Status == "Resolved"))
+    {
+        <div class="card mb-4" style="max-width: 85vw;">
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                    @if (!string.IsNullOrWhiteSpace(report.ImageUrl))
+                    {
+                        <img src="@report.ImageUrl" class="card-img" alt="Report visual">
+                    }
+                    else
+                    {
+                        <img src="https://placehold.co/300x350" class="card-img" alt="Report visual placeholder">
+                    }
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h3 class="card-title" style="color: #141414;">@report.TitleOfReport</h3>
+                        <p class="card-text text-secondary">
+                            @report.Description
+                        </p>
+                        <p class="card-text" style="font-size: 1.25rem;">
+                            <small class="text-muted">Reported on @report.DateOfReport.ToString("d")</small>
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">Status: @report.Status</small>
+
+                        </p>
                         <div class="d-flex">
                             <a asp-controller="Report" asp-action="Details" asp-route-id="@report.ReportId" class="btn btn-dark text-secondary py-2 px-4 mr-2">View Report</a>
                             @if (User.IsInRole("Investigator"))
