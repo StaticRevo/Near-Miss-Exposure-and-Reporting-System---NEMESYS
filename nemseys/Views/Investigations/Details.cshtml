@@ -8,8 +8,13 @@
 
 <div class="container py-2">
     <section>
-        <h1 class="display-5 font-weight-bold mb-6 text-center">@Model.TitleOfReport</h1>
-        <p class="font-weight-bold mb-6 text-center">@Model.ReportDescription</p>
+       
+         <h1 class="display-5 font-weight-bold mb-6">@Model.TitleOfReport</h1>
+        <div class="card bg-secondary">
+            <div class="card-body">
+                <span class="font-weight-bold mb-6 text-white" style="font-size: 15px; max-width: 600px; display: inline-block;">@Model.ReportDescription</span>
+            </div>
+        </div>
 
 
         <!-- Report Information -->
@@ -98,4 +103,4 @@
         </form>
     </section>
 </div>
-﻿
+
