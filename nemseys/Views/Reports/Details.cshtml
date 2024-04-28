@@ -6,6 +6,7 @@
 }
 
 <div class="container my-5 d-flex flex-column" style="min-height: 100vh;">
+
     <section class="mb-auto">
         <!-- Content will push the button down -->
         <h1 class="display-4 font-weight-bold mb-5 text-center">@Model.TitleOfReport</h1>
@@ -17,33 +18,33 @@
         </div>
 
         <!-- Image and Parameters Section -->
-        <div class="row mb-5">
+        <div class="row mb-5 align-items-center">
             <div class="col-md-6 text-center mb-3 mb-md-0">
                 @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
                 {
-                    <img src="@Model.ImageUrl" alt="Report Image" class="img-thumbnail" />
+                    <img src="@Model.ImageUrl" alt="Report Image" class="img-fluid rounded shadow" />
                 }
                 else
                 {
-                    <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">No Images Available.</div>
+                    <div class="bg-light d-flex align-items-center justify-content-center rounded shadow" style="height: 200px;">No Images Available.</div>
                 }
             </div>
-            <div class="col-md-6 bg-light p-4">
-                <h2 class="h2 font-weight-bold mb-4" style="color:#414141;">Report Parameters</h2>
-                <p class="bg-dark text-white p-2 mb-2">
+            <div class="col-md-6 bg-light p-4 rounded shadow">
+                <h2 class="h2 font-weight-bold mb-4" style="color: #414141;">Report Parameters</h2>
+                <p class="bg-dark text-white p-2 mb-2 rounded">
                     <strong>Date of Report:</strong> @Model.DateOfReport.ToString("yyyy-MM-dd")
                 </p>
-                <p class="bg-dark text-white p-2 mb-2">
+                <p class="bg-dark text-white p-2 mb-2 rounded">
                     <strong>Hazard Location:</strong> @Model.HazardLocation
                 </p>
-                <p class="bg-dark text-white p-2">
+                <p class="bg-dark text-white p-2 rounded">
                     <strong>Type of Hazard:</strong> @Model.TypeOfHazard
                 </p>
             </div>
         </div>
 
         <!-- Additional Report Details -->
-        <div class="card">
+        <div class="card rounded shadow">
             <div class="card-body">
                 <h2 class="card-title h2 font-weight-bold" style="color: #414141;">Additional Details</h2>
                 <p class="card-text" style="color: #414141;"><i class="fas fa-info-circle"></i> <strong>Status:</strong> @Model.Status</p>
@@ -53,8 +54,10 @@
         </div>
 
     </section>
+
     <div class="mt-auto text-center">
         <!-- Center-align the button -->
         <a asp-controller="Home" asp-action="Index" class="btn btn-secondary rounded-pill btn-lg px-4 py-2" style="font-size: 1.25rem;">Back to List</a>
     </div>
+
 </div>
