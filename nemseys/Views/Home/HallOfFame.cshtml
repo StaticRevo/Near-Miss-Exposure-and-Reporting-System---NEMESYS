@@ -8,67 +8,101 @@
         <h2 class="text-center display-4 font-weight-bold mb-5">Hall of Fame</h2>
         <!-- Podium for Top 3 Reporters -->
         <div class="d-flex justify-content-center mb-5">
-            <!-- Second Place -->
-            <div class="text-center podium second-place mr-2">
-                <h3 class="reporter-name">Johnny</h3>
-                <h4 class="report-count">350 Reports</h4>
-                <div class="rank">2</div>
-            </div>
-            <!-- First Place -->
-            <div class="text-center podium first-place mx-2">
-                <h3 class="reporter-name">Johnny</h3>
-                <h4 class="report-count">500 Reports</h4>
-                <div class="rank">1</div>
-            </div>
-            <!-- Third Place -->
-            <div class="text-center podium third-place ml-2">
-                <h3 class="reporter-name">Johnny</h3>
-                <h4 class="report-count">300 Reports</h4>
-                <div class="rank">3</div>
-            </div>
-        </div>
-
-        <!-- Leaderboard List for Other Reporters -->
-        <div class="list-group">
-            @for (int i = 4; i <= 6; i++)
+            @if (Model.Count >= 2 && Model[1] != null)
             {
-                <div class="list-group-item d-flex justify-content-between align-items-center leaderboard-entry">
-                    <span class="leaderboard-rank">#{i}</span>
-                    <span class="reporter-name">Johnny Ive</span>
-                    <span class="report-count">200 reports</span>
+                <!-- Second Place -->
+                <div class="podium second-place mr-2">
+                    <h3 class="reporter-name">@Model[1].AuthorAlias</h3>
+                    <h4 class="report-count">@Model[1].ClosedReportsCount Reports</h4>
+                    <div class="rank">2</div>
+                </div>
+            }
+            @if (Model.Count >= 1 && Model[0] != null)
+            {
+                <!-- First Place -->
+                <div class="podium first-place mx-2">
+                    <h3 class="reporter-name">@Model[0].AuthorAlias</h3>
+                    <h4 class="report-count">@Model[0].ClosedReportsCount Reports</h4>
+                    <div class="rank">1</div>
+                </div>
+            }
+            @if (Model.Count >= 3 && Model[2] != null)
+            {
+                <!-- Third Place -->
+                <div class="podium third-place ml-2">
+                    <h3 class="reporter-name">@Model[2].AuthorAlias</h3>
+                    <h4 class="report-count">@Model[2].ClosedReportsCount Reports</h4>
+                    <div class="rank">3</div>
                 </div>
             }
         </div>
+
+
+        <!-- Leaderboard List for Other Reporters -->
+        <div class="list-group">
+            @for (int i = 3; i < Model.Count; i++)
+            {
+                if (Model[i] != null)
+                {
+                    <div class="list-group-item d-flex justify-content-between align-items-center leaderboard-entry">
+                        <span class="leaderboard-rank text-black">@((i + 1).ToString() + ": ")</span>
+                        <span class="reporter-name text-black">@Model[i].AuthorAlias</span>
+                        <span class="report-count text-black">@Model[i].ClosedReportsCount Closed Reports</span>
+                    </div>
+                }
+            }
+        </div>
+
     </section>
 </div>
 
 <style>
+    .text-black {
+        color: black;
+    }
+
+    .d-flex.justify-content-center.mb-5 {
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-end;
+        height: 250px;
+    }
+
     .podium {
         position: relative;
-        padding: 1rem;
         width: 100px;
-        border: 1px solid #000; 
+        border: 1px solid #000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
 
     .first-place {
         background-color: gold;
+        width: 170px;
+        height: 200px;
     }
 
     .second-place {
         background-color: silver;
+        width: 170px;
+        height: 150px;
     }
 
     .third-place {
-        background-color: #cd7f32; 
+        background-color: #cd7f32;
+        width: 170px;
+        height: 100px;
     }
 
     .podium .rank {
         position: absolute;
-        bottom: -25px; 
+        bottom: 100%; 
         left: 50%;
         transform: translateX(-50%);
-        font-size: 2rem; 
-        color: #fff; 
+        font-size: 2rem;
+        color: #fff;
     }
 
     .leaderboard-entry {
