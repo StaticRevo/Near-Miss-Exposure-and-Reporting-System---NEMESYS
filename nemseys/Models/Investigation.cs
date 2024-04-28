@@ -38,6 +38,7 @@ namespace Nemesys.Models
         public DateTime DateOfReport { get; set; }
         [NotMapped]
         public string HazardLocation { get; set; }
+        [NotMapped]
         public DateTime DateAndTimeSpotted { get; set; }
         [NotMapped]
         public string TypeOfHazard { get; set; }
@@ -45,6 +46,7 @@ namespace Nemesys.Models
         public string TitleOfReport { get; set; }
         [NotMapped]
         public string ReportDescription { get; set; }
+        [NotMapped]
         public string ReportStatus { get; set; }
         [NotMapped]
         public string ImageUrl { get; set; }
