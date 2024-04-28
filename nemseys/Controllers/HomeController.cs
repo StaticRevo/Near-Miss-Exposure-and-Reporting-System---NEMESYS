@@ -39,10 +39,20 @@ public class HomeController : Controller
         }
 
     }
-    public IActionResult Index(string sortOrder)
+    public IActionResult Index(string sortOrder, string status)
     {
+        // Store the current sort order and status in the ViewBag
+        ViewBag.SortOrder = sortOrder;
+        ViewBag.Status = status;
+
         // Retrieve the reports from the database
         var reports = _nemeseysRepository.GetAllReports();
+
+        // Filter the reports based on the status
+        if (!string.IsNullOrEmpty(status) && status != "All")
+        {
+            reports = reports.Where(r => r.Status == status);
+        }
 
         switch (sortOrder)
         {
@@ -57,9 +67,11 @@ public class HomeController : Controller
                 break;
         }
 
-        // Pass the sorted reports to the view
+        // Pass the sorted and filtered reports to the view
         return View(reports.ToList());
     }
+
+
 
     public IActionResult HallOfFame()
     {
