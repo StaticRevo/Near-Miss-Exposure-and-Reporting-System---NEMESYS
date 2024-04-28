@@ -367,6 +367,7 @@ namespace Nemesys.Controllers
             if (report.UserId == currentUserId)
             {
                 _nemeseysRepository.DeleteReport(report);
+                TempData["Message"] = "Successfully Deleted The Report!";
                 return RedirectToAction("Index", "Home");
             }
             else
