@@ -10,16 +10,16 @@
 
     @foreach (var investigation in Model.Investigations)
     {
-        <div class="card mb-3" style="max-width: 85vw;">
+        <div class="card mb-3 animate__animated animate__fadeIn" style="max-width: 85vw;">
             <div class="row no-gutters">
                 <div class="col-md-4">
                     @if (!string.IsNullOrWhiteSpace(investigation.ImageUrl))
                     {
-                        <img src="@investigation.ImageUrl" class="card-img" alt="Report visual">
+                        <img src="@investigation.ImageUrl" class="card-img" alt="Report visual" style="height: 100%; object-fit: cover;">
                     }
                     else
                     {
-                        <img src="https://placehold.co/300x350" class="card-img" alt="Report visual placeholder">
+                        <img src="https://placehold.co/300x350" class="card-img" alt="Report visual placeholder" style="height: 100%; object-fit: cover;">
                     }
                 </div>
                 <div class="col-md-8">
@@ -56,9 +56,9 @@
                             <p class="card-text text-secondary">
                                 Type Of Hazard: @investigation.TypeOfHazard
                             </p>
-                            <p class="card-text text-secondary">
-                                Report Status: @investigation.ReportStatus
-                            </p>
+                            <div class="card-footer bg-transparent">
+                                <span class="badge @(investigation.ReportStatus == "Reported" ? "badge-danger" : (investigation.ReportStatus == "Under Review" ? "badge-warning" : "badge-success"))">@investigation.ReportStatus</span>
+                            </div>
                         </div>
                     </div>
                 </div>
