@@ -12,7 +12,7 @@
          <h1 class="display-5 font-weight-bold mb-6">@Model.TitleOfReport</h1>
         <div class="card bg-secondary">
             <div class="card-body">
-                <span class="font-weight-bold mb-6 text-white" style="font-size: 15px; max-width: 600px; display: inline-block;">@Model.ReportDescription</span>
+                <span class="font-weight-bold mb-6 text-white" style="font-size: 15px; max-width: 800px; display: inline-block;">@Model.ReportDescription</span>
             </div>
         </div>
 
@@ -38,7 +38,6 @@
                         <label class="font-weight-bold">Hazard Location:</label>
                         <input type="text" class="form-control bg-dark text-white" value="@Model.HazardLocation" readonly>
                     </div>
-
                     <div class="form-group mb-2">
                         <label class="font-weight-bold">Date and Time Spotted:</label>
                         <input type="text" class="form-control bg-dark text-white" value="@Model.DateAndTimeSpotted" readonly>
@@ -53,6 +52,10 @@
                     </div>
                 </form>
             </div>
+        </div>
+
+        <div id="map-container" class="mb-5">
+            <div id="map" style="height: 400px; width: 100%;" data-location="@Model.HazardLocation"></div>
         </div>
 
         <!-- Investigation Section -->
@@ -104,3 +107,9 @@
     </section>
 </div>
 
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/displayMap.js"></script>
+}
