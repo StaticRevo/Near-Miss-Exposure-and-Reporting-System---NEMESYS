@@ -9,88 +9,179 @@ namespace Nemesys.Models.Repositories
     public class NemesysRepository : INemeseysRepository
     {
         private readonly AppDbContext _appDbContext;
+        private readonly ILogger<NemesysRepository> _logger;
 
-        public NemesysRepository(AppDbContext appDbContext)
+
+        public NemesysRepository(AppDbContext appDbContext, ILogger<NemesysRepository> logger)
         {
             _appDbContext = appDbContext;
+            _logger = logger;
         }
         public IEnumerable<Report> GetAllReports()
         {
-            return _appDbContext.Reports.OrderBy(report => report.DateOfReport);
+            try
+            {
+                return _appDbContext.Reports.OrderBy(report => report.DateOfReport);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                throw;
+            }
+            
         }
         public Report GetReportById(int reportId)
         {
-            return _appDbContext.Reports.FirstOrDefault(p => p.ReportId == reportId);
+            try
+            {
+                return _appDbContext.Reports.FirstOrDefault(p => p.ReportId == reportId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                throw;
+            }
         }
         public void CreateReport(Report report)
         {
-            _appDbContext.Reports.Add(report);
-            _appDbContext.SaveChanges();
+            try
+            {
+                _appDbContext.Reports.Add(report);
+                _appDbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                throw;
+            }    
         }
         public void UpdateReport(Report report)
         {
-            var existingReport = _appDbContext.Reports.SingleOrDefault(bp => bp.ReportId == report.ReportId);
-            if (existingReport != null)
+            try
             {
-                // Update properties
-                existingReport.DateOfReport = report.DateOfReport;
-                existingReport.HazardLocation = report.HazardLocation;
-                existingReport.DateAndTimeSpotted = report.DateAndTimeSpotted;
-                existingReport.TypeOfHazard = report.TypeOfHazard;
-                existingReport.TitleOfReport = report.TitleOfReport;
-                existingReport.Description = report.Description;
-                existingReport.Status = report.Status;
-                existingReport.ImageUrl = report.ImageUrl;
-                existingReport.Upvotes = report.Upvotes;
+                var existingReport = _appDbContext.Reports.SingleOrDefault(bp => bp.ReportId == report.ReportId);
+                if (existingReport != null)
+                {
+                    // Update properties
+                    existingReport.DateOfReport = report.DateOfReport;
+                    existingReport.HazardLocation = report.HazardLocation;
+                    existingReport.DateAndTimeSpotted = report.DateAndTimeSpotted;
+                    existingReport.TypeOfHazard = report.TypeOfHazard;
+                    existingReport.TitleOfReport = report.TitleOfReport;
+                    existingReport.Description = report.Description;
+                    existingReport.Status = report.Status;
+                    existingReport.ImageUrl = report.ImageUrl;
+                    existingReport.Upvotes = report.Upvotes;
 
-                _appDbContext.Entry(existingReport).State = EntityState.Modified;
-                _appDbContext.SaveChanges();
+                    _appDbContext.Entry(existingReport).State = EntityState.Modified;
+                    _appDbContext.SaveChanges();
+                }
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                throw;
+            }
+            
         }
         public void DeleteReport(Report report)
         {
-            _appDbContext.Reports.Remove(report);
-            _appDbContext.SaveChanges();
+            try
+            {
+                _appDbContext.Reports.Remove(report);
+                _appDbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                throw;
+            }    
         }
 
 
         // Investigation Section
         public IEnumerable<Investigation> GetAllInvestigations()
         {
-            return _appDbContext.Investigations.OrderBy(investigation => investigation.DateOfAction);
+            try
+            {
+                return _appDbContext.Investigations.OrderBy(investigation => investigation.DateOfAction);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                throw;
+            }
+            
         }
 
         public Investigation GetInvestigationById(int investigationId)
         {
-            return _appDbContext.Investigations.FirstOrDefault(p => p.InvestigationId == investigationId);
+            try
+            {
+                return _appDbContext.Investigations.FirstOrDefault(p => p.InvestigationId == investigationId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                throw;
+            }
+            
         }
 
         public void CreateInvestigation(Investigation investigation)
         {
-            _appDbContext.Investigations.Add(investigation);
-            _appDbContext.SaveChanges();
-        }
-        public void UpdateInvestigation(Investigation investigation)
-        {
-            var existingInvestigation = _appDbContext.Investigations.SingleOrDefault(i => i.InvestigationId == investigation.InvestigationId);
-            if (existingInvestigation != null)
+            try
             {
-                // Update properties
-                existingInvestigation.InvestigationTitle = investigation.InvestigationTitle;
-                existingInvestigation.Feedback = investigation.Feedback;
-                existingInvestigation.DateOfAction = investigation.DateOfAction;
-                existingInvestigation.Status = investigation.Status;
-                existingInvestigation.Outcome = investigation.Outcome;
-                existingInvestigation.UserId = investigation.UserId;
-
-                _appDbContext.Entry(existingInvestigation).State = EntityState.Modified;
+                _appDbContext.Investigations.Add(investigation);
                 _appDbContext.SaveChanges();
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                throw;
+            }
+            
+        }
+
+        public void UpdateInvestigation(Investigation investigation)
+        {
+            try
+            {
+                var existingInvestigation = _appDbContext.Investigations.SingleOrDefault(i => i.InvestigationId == investigation.InvestigationId);
+                if (existingInvestigation != null)
+                {
+                    // Update properties
+                    existingInvestigation.InvestigationTitle = investigation.InvestigationTitle;
+                    existingInvestigation.Feedback = investigation.Feedback;
+                    existingInvestigation.DateOfAction = investigation.DateOfAction;
+                    existingInvestigation.Status = investigation.Status;
+                    existingInvestigation.Outcome = investigation.Outcome;
+                    existingInvestigation.UserId = investigation.UserId;
+
+                    _appDbContext.Entry(existingInvestigation).State = EntityState.Modified;
+                    _appDbContext.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                throw;
+            }
+            
         }
         public void DeleteInvestigation(Investigation investigation)
         {
-            _appDbContext.Investigations.Remove(investigation);
-            _appDbContext.SaveChanges();
+            try
+            {
+                _appDbContext.Investigations.Remove(investigation);
+                _appDbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                throw;
+            }
+            
         }
 
 
