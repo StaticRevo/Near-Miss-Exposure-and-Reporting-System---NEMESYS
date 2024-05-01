@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model Nemesys.Views.Home.SupportModel
 @{
 }
@@ -9,30 +9,25 @@
     <div class="row">
         <div class="col-md-6 offset-md-3">
             <p class="text-center">Please fill out the below form to report any misuse or abuse of reports/investigations.</p>
-            <form method="post" action="@Url.Action("SendEmail", "Home")" class="mb-4">
+            <form method="post" action="@Url.Action("SendSupportEmail", "Home")" class="mb-4">
                 <div class="form-group">
-                    <label for="Name">Name <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="Name" name="name" required>
+                    <label for="name">Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="name" name="name" required>
                 </div>
                 <div class="form-group">
-                    <label for="Email">Email <span class="text-danger">*</span></label>
-                    <input type="email" class="form-control" id="Email" name="email" required>
+                    <label for="email">Email <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control" id="email" name="email" required>
                 </div>
                 <div class="form-group">
-                    <label for="Phone">Phone <span class="text-danger">*</span></label>
-                    <input type="tel" class="form-control" id="Phone" name="phone" required>
+                    <label for="phone">Phone <span class="text-danger">*</span></label>
+                    <input type="tel" class="form-control" id="phone" name="phone" required>
                 </div>
                 <div class="form-group">
-                    <label for="ReportId" class="text-white">Report ID (optional)</label>
-                    <input type="text" class="form-control" id="ReportId" name="reportId">
-                </div>
-                <div class="form-group">
-                    <label for="Message">Message <span class="text-danger">*</span></label>
-                    <textarea class="form-control" id="Message" name="message" rows="5" required></textarea>
+                    <label for="message">Message <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">Send</button>
             </form>
-
         </div>
     </div>
 </div>
