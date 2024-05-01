@@ -236,12 +236,29 @@ namespace Nemesys.Controllers
         }
 
         [Authorize]
-        public IActionResult MyReports()
+        public IActionResult MyReports(string sortOrder, string status)
         {
             var userId = _userManager.GetUserId(User);
             var reports = _nemeseysRepository.GetAllReports()
-                .Where(b => b.UserId == userId)
-                .OrderByDescending(b => b.DateOfReport);
+                .Where(b => b.UserId == userId);
+
+            switch (sortOrder)
+            {
+                case "Upvotes":
+                    reports = reports.OrderByDescending(b => b.Upvotes);
+                    break;
+                case "DateOfReport":
+                    reports = reports.OrderByDescending(b => b.DateOfReport);
+                    break;
+                default:
+                    reports = reports.OrderByDescending(b => b.DateOfReport);
+                    break;
+            }
+
+            if (!string.IsNullOrEmpty(status) && status != "All")
+            {
+                reports = reports.Where(b => b.Status == status);
+            }
 
             var model = new ReportListViewModel()
             {
@@ -270,6 +287,7 @@ namespace Nemesys.Controllers
 
             return View(model);
         }
+
         [HttpPost]
         [Authorize]
         public IActionResult Upvote(int id)
