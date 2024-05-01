@@ -23,7 +23,7 @@
                 <img src="@Model.ImageUrl" alt="Report Image" style="width: 100%; height: 100%; object-fit: cover;" />
             </div>
             <div class="col-md-6 bg-secondary p-4">
-                <h3 class="h3 font-weight-semibold mb-2">Report Parameters</h3>
+                <h3 class="h3 font-weight-semibold mb-2">Report         Parameters</h3>
                 <form>
                     <div class="form-group mb-2">
                         <label class="font-weight-bold">Date Of Report:</label>
@@ -50,9 +50,13 @@
             </div>
         </div>
 
+        <div id="map-container" class="mb-5">
+            <div id="map" style="height: 400px; width: 100%;" data-location="@Model.HazardLocation"></div>
+        </div>
+
         <!-- Investigation Section -->
         <div class="mb-4 text-center">
-            <h2 class="h2 font-weight-semibold mb-2">Investigation Section</h2>
+            <h2 class="h1 font-weight-semibold mb-2">Investigation Section</h2>
         </div>
 
         <form asp-action="Create" method="post" enctype="multipart/form-data">
@@ -66,6 +70,7 @@
             <input type="hidden" asp-for="ReportStatus" />
             <input type="hidden" asp-for="ImageUrl" />
             @Html.HiddenFor(model => model.ReportId)
+
 
             <!-- Investigation Title -->
             <div class="form-group mb-3">
@@ -105,4 +110,10 @@
     </section>
 </div>
 
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/displayMap.js"></script>
+}
   
