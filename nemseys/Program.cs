@@ -3,6 +3,7 @@ using Nemesys.Models.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Nemesys.Models.Contexts;
+using Nemesys.Models;
 
 namespace Nemesys
 {
@@ -20,7 +21,7 @@ namespace Nemesys
 
             //Configure Identity framework core
             //Thsee are only for illustration purposes (in reality you would add what you actually require)
-            builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = true;
 
@@ -71,17 +72,17 @@ namespace Nemesys
                 app.UseHsts();
             }
 
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+
             app.UseHttpsRedirection();
-            app.UseStatusCodePages();
+            app.UseStatusCodePagesWithRedirects("/Error/{0}");
             app.UseStaticFiles();
             app.UseRouting();
 
             app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.UseAuthorization(); 
 
             //Due to the fact that we're using ASP.Net Identity, which uses Razor Pages (MVVM)
             app.MapRazorPages();
