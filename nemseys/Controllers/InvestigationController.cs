@@ -25,27 +25,48 @@ namespace Nemesys.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index(string sortOrder)
+        [HttpGet]
+        public IActionResult Index()
         {
-            // Retrieve the investigations from the database
-            var investigations = _nemeseysRepository.GetAllInvestigations();
-
-            switch (sortOrder)
+            var investigations = _nemeseysRepository.GetAllInvestigations().OrderByDescending(b => b.DateOfAction);
+            var model = new InvestigationListViewModel()
             {
-                case "DateOfAction":
-                    investigations = investigations.OrderByDescending(i => i.DateOfAction);
-                    break;
-                case "Status":
-                    investigations = investigations.OrderByDescending(i => i.Status);
-                    break;
-                default:
-                    investigations = investigations.OrderByDescending(i => i.DateOfAction);
-                    break;
-            }
+                TotalEntries = investigations.Count(),
+                Investigations = investigations.Select(i =>
+                {
+                    var report = _nemeseysRepository.GetReportById(i.ReportId);
+                    return new InvestigationViewModel
+                    {
+                        InvestigationId = i.InvestigationId,
+                        DateOfAction = i.DateOfAction,
+                        Status = i.Status,
+                        InvestigationTitle = i.InvestigationTitle,
+                        Outcome = i.Outcome,
+                        Feedback = i.Feedback,
+                        ReportId = i.ReportId,
 
-            // Pass the sorted investigations to the view
-            return View(investigations);
+                        TitleOfReport = report.TitleOfReport,
+                        ReportDescription = report.Description,
+                        ImageUrl = report.ImageUrl,
+                        DateOfReport = report.DateOfReport,
+                        HazardLocation = report.HazardLocation,
+                        DateAndTimeSpotted = report.DateAndTimeSpotted,
+                        TypeOfHazard = report.TypeOfHazard,
+                        ReportStatus = report.Status,
+
+                        Author = new AuthorViewModel()
+                        {
+                            Id = i.UserId,
+                            Name = (_userManager.FindByIdAsync(i.UserId).Result != null) ?
+                                _userManager.FindByIdAsync(i.UserId).Result.UserName : "Anonymous"
+                        }
+                    };
+                })
+            };
+
+            return View(model);
         }
+
 
         public IActionResult Details(int id)
         {
@@ -306,13 +327,11 @@ namespace Nemesys.Controllers
         }
 
         [Authorize(Roles = "Investigator")]
-        public IActionResult MyInvestigations()
+        public IActionResult MyInvestigations(string status)
         {
             var userId = _userManager.GetUserId(User);
-            
             var investigations = _nemeseysRepository.GetAllInvestigations()
-                .Where(i => i.UserId == userId)
-                .OrderByDescending(i => i.DateOfAction);
+                .Where(i => i.UserId == userId);
 
             var model = new InvestigationListViewModel()
             {
@@ -343,15 +362,15 @@ namespace Nemesys.Controllers
                         {
                             Id = i.UserId,
                             Name = (_userManager.FindByIdAsync(i.UserId).Result != null) ?
-                            _userManager.FindByIdAsync(i.UserId).Result.UserName : "Anonymous"
+                                _userManager.FindByIdAsync(i.UserId).Result.UserName : "Anonymous"
                         }
                     };
-
                 })
             };
 
             return View(model);
         }
+
         // This method responds to GET requests and shows the confirmation page
         [HttpGet]
         [Authorize]
