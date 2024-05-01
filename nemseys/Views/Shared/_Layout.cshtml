@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="~/Nemesis.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
 </head>
 <body class="bg-dark text-white d-flex flex-column min-vh-100">
 
@@ -30,7 +33,11 @@
                 <!-- If user has investigator role-->
                     <a asp-controller="Investigation" asp-action="MyInvestigations" class="h5 text-white mr-4 font-weight-lighter medium">My Investigations</a>
             }
-                <a asp-controller="Home" asp-action="HallOfFame" class="h5 text-white mr-4 font-weight-lighter medium">Hall Of Fame</a>
+            
+            <a asp-controller="Investigation" asp-action="Index"class="h5 text-white mr-4 font-weight-lighter medium">Investigations</a>
+
+            <a asp-controller="Home" asp-action="HallOfFame" class="h5 text-white mr-4 font-weight-lighter medium">Hall Of Fame</a>
+
 
             <!-- Profile Icon with Dropdown -->
             <div class="dropdown">
@@ -54,11 +61,11 @@
     @RenderSection("CustomFooter", required: false)
     @if (!IsSectionDefined("CustomFooter"))
     {
-        <footer class="bg-secondary text-center text-sm px-3 py-2">
+        <footer class="mt-auto bg-secondary text-center text-sm px-3 py-2">
             <div class="d-flex justify-content-between">
-                <a href="@Url.Action("Privacy", "Home")" class="text-lg text-decoration-none text-white">Privacy Policy</a>
-                <span class="text-lg text-white">Copyright Nemesys Inc.</span>
-                <a href="@Url.Action("Support", "Home")" class="text-lg text-decoration-none text-white">Support</a>
+                <span class="text-lg">Nemesys</span>
+                <span class="text-lg">Copyright Nemesys Inc.</span>
+                <span class="text-lg text-decoration-underline">Support</span>
             </div>
         </footer>
     }
@@ -67,6 +74,8 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    
 
     <script src="~/js/site.js" asp-append-version="true"></script>
 
