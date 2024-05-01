@@ -12,8 +12,7 @@
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <h2 class="display-5 text-center mb-5 font-weight-bold">Log A Report</h2>
-
+                <h2 class="display-3 text-center mb-5 font-weight-bold">Log A Report</h2>
 
                 <!-- Report Information -->
                 <div class="form-group">
@@ -49,9 +48,11 @@
                         <span asp-validation-for="DateOfReport" class="text-danger"></span>
                     </div>
                     <div class="form-group">
+
                         <label asp-for="HazardLocation">Location of Hazard</label>
                         <input asp-for="HazardLocation" class="form-control" placeholder="Enter location">
                         <span asp-validation-for="HazardLocation" class="text-danger"></span>
+                        <div id="map" style="height: 400px; width: 100%;"></div>
                     </div>
                     <div class="form-group">
                         <label asp-for="DateAndTimeSpotted">Date and Time of Hazard</label>
@@ -72,10 +73,11 @@
                         <label asp-for="Status">Status</label>
                         <select asp-for="Status" class="form-control">
                             <option value="Reported">Reported</option>
-                            <option value="Under Review">Under Review</option>
-                            <option value="Resolved">Resolved</option>
+                            <option value="Under Review" disabled>Under Review</option>
+                            <option value="Resolved" disabled>Resolved</option>
                         </select>
                     </div>
+
 
                 </div>
 
@@ -94,4 +96,5 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script src="~/js/imagePreview.js"></script>
+    <script src="~/js/map.js"></script> 
 }
