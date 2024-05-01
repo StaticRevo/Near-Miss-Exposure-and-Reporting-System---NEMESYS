@@ -12,13 +12,16 @@ namespace Nemesys.Controllers;
 
 public class HomeController : Controller
 {
+
     private readonly INemeseysRepository _nemeseysRepository;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ILogger<HomeController> _logger;
 
-    public HomeController(INemeseysRepository bloggyRepository, UserManager<ApplicationUser> userManager)
+    public HomeController(INemeseysRepository bloggyRepository, UserManager<ApplicationUser> userManager, ILogger<HomeController> logger)
     {
         _nemeseysRepository = bloggyRepository;
         _userManager = userManager;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -37,87 +40,135 @@ public class HomeController : Controller
         }
         catch (Exception ex)
         {
-            //_logger.LogError(ex.Message); //More on this soon
+            _logger.LogError(ex.Message);
             return View("Error");
         }
 
     }
     public IActionResult Index(string sortOrder, string status, string searchTerm)
     {
-        // Store the current sort order and status in the ViewBag
-        ViewBag.SortOrder = sortOrder;
-        ViewBag.Status = status;
-
-        // Retrieve the reports from the database
-        var reports = _nemeseysRepository.GetAllReports();
-
-        // Filter the reports based on the search term
-        if (!string.IsNullOrEmpty(searchTerm))
+        try
         {
-            reports = reports.Where(r => r.TitleOfReport.Contains(searchTerm));
-        }
+            // Store the current sort order and status in the ViewBag
+            ViewBag.SortOrder = sortOrder;
+            ViewBag.Status = status;
 
-        // Filter the reports based on the status
-        if (!string.IsNullOrEmpty(status) && status != "All")
+            // Retrieve the reports from the database
+            var reports = _nemeseysRepository.GetAllReports();
+
+            // Filter the reports based on the search term
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                reports = reports.Where(r => r.TitleOfReport.Contains(searchTerm));
+            }
+
+            // Filter the reports based on the status
+            if (!string.IsNullOrEmpty(status) && status != "All")
+            {
+                reports = reports.Where(r => r.Status == status);
+            }
+
+            switch (sortOrder)
+            {
+                case "Upvotes":
+                    reports = reports.OrderByDescending(r => r.Upvotes);
+                    break;
+                case "DateOfReport":
+                    reports = reports.OrderByDescending(r => r.DateOfReport);
+                    break;
+                default:
+                    reports = reports.OrderByDescending(r => r.DateOfReport);
+                    break;
+            }
+
+            // Pass the sorted and filtered reports to the view
+            return View(reports.ToList());
+        }
+        catch (Exception ex)
         {
-            reports = reports.Where(r => r.Status == status);
+            _logger.LogError(ex.Message, ex);
+            return View("Error");
         }
-
-        switch (sortOrder)
-        {
-            case "Upvotes":
-                reports = reports.OrderByDescending(r => r.Upvotes);
-                break;
-            case "DateOfReport":
-                reports = reports.OrderByDescending(r => r.DateOfReport);
-                break;
-            default:
-                reports = reports.OrderByDescending(r => r.DateOfReport);
-                break;
-        }
-
-        // Pass the sorted and filtered reports to the view
-        return View(reports.ToList());
+        
     }
 
     public IActionResult Privacy()
     {
-        return View();
+        try
+        {
+            return View();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message, ex);
+            return View("Error");
+        }
     }
 
     public IActionResult Support()
     {
+        try
+        {
+            return View();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message, ex);
+            return View("Error");
+        }
+    }
+
+    public IActionResult Error()
+    {
         return View();
+        //Not handling any errors for Error action
     }
 
     public async Task<IActionResult> HallOfFame()
     {
-        var reporters = await _userManager.Users
+        try
+        {
+            var reporters = await _userManager.Users
             .OrderByDescending(u => u.ClosedReportsCount)
             .ToListAsync();
 
-        return View(reporters);
+            return View(reporters);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message, ex);
+            return View("Error");
+        }
     }
 
     [HttpPost]
-    public async Task<IActionResult> SendEmail(string name, string email, string phone, string reportId, string message)
+    public async Task<IActionResult> SendSupportEmail(string name, string email, string phone, string message)
     {
-        string senderEmail = "site@nemesys.com";
-        string receiverEmail = "info@nemesys.com";
-
-        var mailMessage = new MailMessage(senderEmail, receiverEmail);
-        mailMessage.Subject = "New Support Request";
-        mailMessage.Body = $"Name: {name}\nEmail: {email}\nPhone: {phone}\nReport ID: {reportId}\nMessage: {message}";
-
-        using (var client = new SmtpClient("smtp.example.com", 587)) // Update SMTP details
+        try
         {
-            client.Credentials = new NetworkCredential("smtp_username", "smtp_password");
-            client.EnableSsl = true;
+            string senderEmail = "postmaster@sandbox11f745db67d64bed99778bfbc299ded4.mailgun.org";
+            string receiverEmail = "gregory.pavia.22@um.edu.mt"; // I'm sending this to my UOM account due to testing limit on emails. It does actually work - please see documentation for example
 
-            await client.SendMailAsync(mailMessage);
+            var mailMessage = new MailMessage(senderEmail, receiverEmail);
+            mailMessage.Subject = "New Contact Form Submission";
+            mailMessage.Body = $"Name: {name}\nEmail: {email}\nPhone: {phone}\nMessage: {message}";
+
+            using (var client = new SmtpClient("smtp.mailgun.org", 587))
+            {
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential("postmaster@sandbox11f745db67d64bed99778bfbc299ded4.mailgun.org", "9134f7904d962ffaafc012f939fc1f22-86220e6a-f0291543");
+                client.EnableSsl = true;
+
+                await client.SendMailAsync(mailMessage);
+            }
+
+            return RedirectToAction("Index", "Home"); // Redirect to home page after sending email
         }
-
-        return RedirectToAction("Index", "Home"); // Redirect to home page after sending email
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message, ex);
+            return View("Error");
+        }
     }
 
     public class ModelBindingTest
@@ -128,9 +179,17 @@ public class HomeController : Controller
 
     public IActionResult About(ModelBindingTest test)
     {
-        //Load data from the Model
-        ViewBag.Title = "Nemesys - About";
-        ViewBag.Message = "Hello there, this is the about page. The model binder found - " + test.Name + " - " + test.Id;
-        return View();
+        try
+        {
+            //Load data from the Model
+            ViewBag.Title = "Nemesys - About";
+            ViewBag.Message = "Hello there, this is the about page. The model binder found - " + test.Name + " - " + test.Id;
+            return View();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message, ex);
+            return View("Error");
+        }
     }
 }
