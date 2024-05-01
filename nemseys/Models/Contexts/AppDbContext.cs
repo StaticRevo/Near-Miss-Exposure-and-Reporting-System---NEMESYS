@@ -25,7 +25,8 @@ namespace Nemesys.Models.Contexts
             //Seed roles
             modelBuilder.Entity<IdentityRole>().HasData(
                 new IdentityRole() { Id = "d234f58e-7373-4ee5-98f0-c17892784b05", Name = "Reporter", ConcurrencyStamp = "1", NormalizedName = "REPORTER" },
-                new IdentityRole() { Id = "1db56103-a3e2-4edc-afab-abde856cebe0", Name = "Investigator", ConcurrencyStamp = "1", NormalizedName = "INVESTIGATOR" }
+                new IdentityRole() { Id = "1db56103-a3e2-4edc-afab-abde856cebe0", Name = "Investigator", ConcurrencyStamp = "1", NormalizedName = "INVESTIGATOR" },
+                new IdentityRole() { Id = "b2d2b877-a23a-494d-8305-67c051b1ca11", Name = "Admin", ConcurrencyStamp = "1", NormalizedName = "ADMIN" }
             );
 
 
@@ -46,11 +47,6 @@ namespace Nemesys.Models.Contexts
             PasswordHasher<ApplicationUser> passwordHasher = new PasswordHasher<ApplicationUser>();
             user.PasswordHash = passwordHasher.HashPassword(user, "S@fePassw0rd1"); //make sure you adhere to policies (incl confirmed etc…)
             modelBuilder.Entity<ApplicationUser>().HasData(user);
-
-            //Assign existing user to the admin role
-            modelBuilder.Entity<IdentityUserRole<string>>().HasData(
-                new IdentityUserRole<string>() { RoleId = "d234f58e-7373-4ee5-98f0-c17892784b05", UserId = "134c1566-3f64-4ab4-b1e7-2ffe11f43e32" }
-            );
 
 
             modelBuilder.Entity<Report>().HasData(
