@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Nemesys.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Mail;
+using System.Net;
 
 namespace Nemesys.Controllers;
 
@@ -72,7 +74,36 @@ public class HomeController : Controller
         return View(reports.ToList());
     }
 
+    public IActionResult Privacy()
+    {
+        return View();
+    }
 
+    public IActionResult Support()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> SendEmail(string name, string email, string phone, string reportId, string message)
+    {
+        string senderEmail = "site@nemesys.com";
+        string receiverEmail = "info@nemesys.com";
+
+        var mailMessage = new MailMessage(senderEmail, receiverEmail);
+        mailMessage.Subject = "New Support Request";
+        mailMessage.Body = $"Name: {name}\nEmail: {email}\nPhone: {phone}\nReport ID: {reportId}\nMessage: {message}";
+
+        using (var client = new SmtpClient("smtp.example.com", 587)) // Update SMTP details
+        {
+            client.Credentials = new NetworkCredential("smtp_username", "smtp_password");
+            client.EnableSsl = true;
+
+            await client.SendMailAsync(mailMessage);
+        }
+
+        return RedirectToAction("Index", "Home"); // Redirect to home page after sending email
+    }
 
     public async Task<IActionResult> HallOfFame()
     {
