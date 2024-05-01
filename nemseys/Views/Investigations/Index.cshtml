@@ -1,6 +1,69 @@
-@model Nemesis.ViewModels.InvestigationViewModel
+@model Nemesys.ViewModels.InvestigationListViewModel
 
 @{
-    ViewData["Title"] = "Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Investigations";
 }
-﻿
+
+<div class="text-center">
+    <h1 class="display-4 mb-4" style="font-size: 5em; font-weight: bold;">Investigations</h1>
+</div>
+
+<div class="container px-4 py-5">
+    @foreach (var investigation in Model.Investigations)
+    {
+        <div class="card mb-3 animate__animated animate__fadeIn" style="max-width: 85vw;">
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                    @if (!string.IsNullOrWhiteSpace(investigation.ImageUrl))
+                    {
+                        <img src="@investigation.ImageUrl" class="card-img" alt="Report visual" style="height: 100%; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <img src="https://placehold.co/300x350" class="card-img" alt="Report visual placeholder" style="height: 100%; object-fit: cover;">
+                    }
+                </div>
+
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <div>
+                            <h3 class="card-title" style="color: #141414;">Investigation Title: @investigation.InvestigationTitle</h3>
+                            <p class="card-text text-secondary">
+                                Feedback: @investigation.Feedback
+                            </p>
+                            <div class="d-flex">
+                                <a asp-controller="Investigation" asp-action="Details" asp-route-id="@investigation.InvestigationId" class="btn btn-dark text-secondary py-2 px-4 mr-2">View Investigation</a>
+                            </div>
+                        </div>
+                        <hr /> <!-- Add a horizontal line to separate investigation and report details -->
+                        <div>
+                            <h3 class="card-title" style="color: #141414;">Report Information</h3>
+                            <p class="card-text text-secondary">
+                                Report Title: @investigation.TitleOfReport
+                            </p>
+                            <p class="card-text text-secondary">
+                                Report Description: @investigation.ReportDescription
+                            </p>
+                            <p class="card-text text-secondary">
+                                Date Of Report: @investigation.DateOfReport
+                            </p>
+                            <p class="card-text text-secondary">
+                                Hazard Location: @investigation.HazardLocation
+                            </p>
+                            <p class="card-text text-secondary">
+                                Date And Time Spotted: @investigation.DateAndTimeSpotted
+                            </p>
+                            <p class="card-text text-secondary">
+                                Type Of Hazard: @investigation.TypeOfHazard
+                            </p>
+                            <div class="card-footer bg-transparent">
+                                <span class="badge @(investigation.ReportStatus == "Reported" ? "badge-danger" : (investigation.ReportStatus == "Under Review" ? "badge-warning" : "badge-success"))">@investigation.ReportStatus</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
