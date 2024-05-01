@@ -42,7 +42,7 @@ public class HomeController : Controller
         }
 
     }
-    public IActionResult Index(string sortOrder, string status)
+    public IActionResult Index(string sortOrder, string status, string searchTerm)
     {
         // Store the current sort order and status in the ViewBag
         ViewBag.SortOrder = sortOrder;
@@ -50,6 +50,12 @@ public class HomeController : Controller
 
         // Retrieve the reports from the database
         var reports = _nemeseysRepository.GetAllReports();
+
+        // Filter the reports based on the search term
+        if (!string.IsNullOrEmpty(searchTerm))
+        {
+            reports = reports.Where(r => r.TitleOfReport.Contains(searchTerm));
+        }
 
         // Filter the reports based on the status
         if (!string.IsNullOrEmpty(status) && status != "All")
@@ -84,6 +90,15 @@ public class HomeController : Controller
         return View();
     }
 
+    public async Task<IActionResult> HallOfFame()
+    {
+        var reporters = await _userManager.Users
+            .OrderByDescending(u => u.ClosedReportsCount)
+            .ToListAsync();
+
+        return View(reporters);
+    }
+
     [HttpPost]
     public async Task<IActionResult> SendEmail(string name, string email, string phone, string reportId, string message)
     {
@@ -104,16 +119,6 @@ public class HomeController : Controller
 
         return RedirectToAction("Index", "Home"); // Redirect to home page after sending email
     }
-
-    public async Task<IActionResult> HallOfFame()
-    {
-        var reporters = await _userManager.Users
-            .OrderByDescending(u => u.ClosedReportsCount)
-            .ToListAsync();
-
-        return View(reporters);
-    }
-
 
     public class ModelBindingTest
     {
