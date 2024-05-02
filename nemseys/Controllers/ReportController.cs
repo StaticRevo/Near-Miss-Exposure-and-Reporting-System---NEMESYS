@@ -133,6 +133,12 @@ namespace Nemesys.Controllers
         {
             try
             {
+                // Validate HazardLocation coordinates
+                if (!IsLocationWithinBounds(newReport.HazardLocation))
+                {
+                    ModelState.AddModelError("", "Hazard location coordinates are outside of specified bounds. Please make sure to select a location on Campus");
+                }
+
                 if (ModelState.IsValid)
                 {
                     string fileName = "";
@@ -183,6 +189,30 @@ namespace Nemesys.Controllers
                 _logger.LogError(ex.Message, ex);
                 return View("Error");
             }     
+        }
+
+        private bool IsLocationWithinBounds(string hazardLocation)
+        {
+            // Parse the hazard location string into latitude and longitude components
+            string[] coordinates = hazardLocation.Split(',');
+
+            if (coordinates.Length != 2)
+            {
+                return false;
+            }
+
+            if (!double.TryParse(coordinates[0], out double latitude) || !double.TryParse(coordinates[1], out double longitude))
+            {
+                return false;
+            }
+
+            // Check if the coordinates fall within the specified bounds
+            double minLatitude = 35.80383131839194; // Southern bound
+            double maxLatitude = 36.08266390917025; // Northern bound
+            double minLongitude = 14.181804656982424; // Western bound
+            double maxLongitude = 14.581432342529299; // Eastern bound
+
+            return latitude >= minLatitude && latitude <= maxLatitude && longitude >= minLongitude && longitude <= maxLongitude;
         }
 
         [Authorize]
