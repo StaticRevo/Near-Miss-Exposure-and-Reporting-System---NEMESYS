@@ -1,4 +1,4 @@
-﻿@{
+@{
     if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout !=  null)
     {
         Layout = parentLayout.ToString();
@@ -9,16 +9,18 @@
     }
 }
 
-<h1>Manage your account</h1>
+<h1 class="mb-5">Manage your account</h1>
 
 <div>
-    <h2>Change your account settings</h2>
+    <h2 class="mb-3">Change your account settings</h2>
     <hr />
-    <div class="row">
-        <div class="col-md-3">
-            <partial name="_ManageNav" />
+    <div class="row border border-dark rounded p-3">
+        <div class="col-md-3 mr-5 mt-3 mb-5 border border-dark rounded" style="background-color: white;">
+            <div class="mt-4 mb-4">
+                 <partial name="_ManageNav" />
+            </div>
         </div>
-        <div class="col-md-9">
+        <div class="col-md-8 ml-5 mt-3 mb-5">
             @RenderBody()
         </div>
     </div>
