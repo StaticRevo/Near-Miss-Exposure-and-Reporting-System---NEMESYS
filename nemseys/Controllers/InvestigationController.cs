@@ -8,6 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 using Bloggy.ViewModels;
 using System.Composition;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
+using Microsoft.Identity.Client.Region;
+using System.Net.Mail;
+using System.Net;
 
 
 namespace Nemesys.Controllers
@@ -194,6 +198,7 @@ namespace Nemesys.Controllers
                     switch (investigation.Outcome)
                     {
                         case "Resolved":
+                            SendCloseEmail(newInvestigation.ReportId, newInvestigation.InvestigationTitle, newInvestigation.DateOfAction, newInvestigation.Outcome, newInvestigation.Feedback);
                             report.Status = "Resolved";
                             // Retrieve the user who closed the report
                             var user = await _userManager.GetUserAsync(User);
@@ -254,6 +259,38 @@ namespace Nemesys.Controllers
             }
             
         }
+
+        [HttpPost]
+        public async Task<IActionResult> SendCloseEmail(int ReportId, string InvestigationTitle, System.DateTime DateOfAction, string Outcome, string Feedback)
+        {
+            try
+            {
+                string senderEmail = "postmaster@sandbox11f745db67d64bed99778bfbc299ded4.mailgun.org";
+                string receiverEmail = "gregory.pavia.22@um.edu.mt"; // I'm sending this to my UOM account due to testing limit on emails.
+                                                                     // If we had access to an SMTP server without limits we would send the email to the user that closed the report + admin too.
+
+                var mailMessage = new MailMessage(senderEmail, receiverEmail);
+                mailMessage.Subject = "Closed Report: Summary";
+                mailMessage.Body = $"Report ID: {ReportId}\nInvestigation Title: {InvestigationTitle}\nClosed on Date: {DateOfAction}\nOutcome: {Outcome}\nFeedback: {Feedback}";
+
+                using (var client = new SmtpClient("smtp.mailgun.org", 587))
+                {
+                    client.UseDefaultCredentials = false;
+                    client.Credentials = new NetworkCredential("postmaster@sandbox11f745db67d64bed99778bfbc299ded4.mailgun.org", ""); //password
+                    client.EnableSsl = true;
+
+                    await client.SendMailAsync(mailMessage);
+                }
+
+                return RedirectToAction("Index", "Home"); // Redirect to home page after sending email
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                return View("Error");
+            }
+        }
+
         [Authorize]
         [HttpGet]
         public IActionResult Edit(int id)
