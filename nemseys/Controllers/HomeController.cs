@@ -144,21 +144,19 @@ public class HomeController : Controller
     [HttpPost]
     public async Task<IActionResult> SendSupportEmail(string name, string email, string phone, string message)
     {
-        //Blank implementation cause I can't put the SMTP info in a public repo
-
         try
         {
-            string senderEmail = ""
+            string senderEmail = "postmaster@sandbox11f745db67d64bed99778bfbc299ded4.mailgun.org";
             string receiverEmail = "gregory.pavia.22@um.edu.mt"; // I'm sending this to my UOM account due to testing limit on emails. It does actually work - please see documentation for example
 
             var mailMessage = new MailMessage(senderEmail, receiverEmail);
             mailMessage.Subject = "New Contact Form Submission";
             mailMessage.Body = $"Name: {name}\nEmail: {email}\nPhone: {phone}\nMessage: {message}";
 
-            using (var client = new SmtpClient())
+            using (var client = new SmtpClient("smtp.mailgun.org", 587))
             {
                 client.UseDefaultCredentials = false;
-                client.Credentials = new NetworkCredential(); //password
+                client.Credentials = new NetworkCredential("postmaster@sandbox11f745db67d64bed99778bfbc299ded4.mailgun.org", "db518a64b2ff853531cb9c71fa2178f2-86220e6a-afcff80d"); //password
                 client.EnableSsl = true;
 
                 await client.SendMailAsync(mailMessage);
