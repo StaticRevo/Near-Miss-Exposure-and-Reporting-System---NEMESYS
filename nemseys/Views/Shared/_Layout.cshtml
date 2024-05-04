@@ -37,7 +37,10 @@
             <a asp-controller="Investigation" asp-action="Index"class="h5 text-white mr-4 font-weight-lighter medium">Investigations</a>
 
             <a asp-controller="Home" asp-action="HallOfFame" class="h5 text-white mr-4 font-weight-lighter medium">Hall Of Fame</a>
-
+                <div class="custom-control custom-switch mb-1 ml-2">
+                    <input type="checkbox" class="custom-control-input" id="themeToggle" onchange="toggleTheme()">
+                    <label class="custom-control-label" for="themeToggle" id="themeLabel">Dark Mode</label>
+                </div>
 
             <!-- Profile Icon with Dropdown -->
             <div class="dropdown">
@@ -69,6 +72,8 @@
             </div>
         </footer>
     }
+
+    <script src="~/js/darkmode.js" asp-append-version="true"></script>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
