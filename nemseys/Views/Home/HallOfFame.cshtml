@@ -5,13 +5,13 @@
 
 <div class="container py-5 my-5">
     <section>
-        <h2 class="text-center display-4 font-weight-bold mb-5">Hall of Fame</h2>
+        <h2 class="text-center display-2 font-weight-bold mb-5 animate__animated animate__fadeIn">Hall of Fame</h2>
         <!-- Podium for Top 3 Reporters -->
         <div class="d-flex justify-content-center mb-5">
             @if (Model.Count >= 2 && Model[1] != null)
             {
                 <!-- Second Place -->
-                <div class="podium second-place mr-2">
+                <div class="podium second-place mr-2 animate__animated animate__fadeIn">
                     <h3 class="reporter-name">@Model[1].AuthorAlias</h3>
                     <h4 class="report-count">@Model[1].ClosedReportsCount Reports</h4>
                     <div class="rank">2</div>
@@ -20,7 +20,7 @@
             @if (Model.Count >= 1 && Model[0] != null)
             {
                 <!-- First Place -->
-                <div class="podium first-place mx-2">
+                <div class="podium first-place mx-2 animate__animated animate__fadeIn">
                     <h3 class="reporter-name">@Model[0].AuthorAlias</h3>
                     <h4 class="report-count">@Model[0].ClosedReportsCount Reports</h4>
                     <div class="rank">1</div>
@@ -29,7 +29,7 @@
             @if (Model.Count >= 3 && Model[2] != null)
             {
                 <!-- Third Place -->
-                <div class="podium third-place ml-2">
+                <div class="podium third-place ml-2 animate__animated animate__fadeIn">
                     <h3 class="reporter-name">@Model[2].AuthorAlias</h3>
                     <h4 class="report-count">@Model[2].ClosedReportsCount Reports</h4>
                     <div class="rank">3</div>
@@ -44,7 +44,7 @@
             {
                 if (Model[i] != null)
                 {
-                    <div class="list-group-item d-flex justify-content-between align-items-center leaderboard-entry">
+                    <div class="list-group-item d-flex justify-content-between align-items-center leaderboard-entry animate__animated animate__fadeIn">
                         <span class="leaderboard-rank text-black">@((i + 1).ToString() + ": ")</span>
                         <span class="reporter-name text-black">@Model[i].AuthorAlias</span>
                         <span class="report-count text-black">@Model[i].ClosedReportsCount Closed Reports</span>
