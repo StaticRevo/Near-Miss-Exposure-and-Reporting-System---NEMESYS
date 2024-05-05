@@ -77,7 +77,7 @@ namespace Nemesys.Controllers
                 _logger.LogError(ex.Message, ex);
                 return View("Error");
             }
-            
+
         }
 
 
@@ -118,7 +118,7 @@ namespace Nemesys.Controllers
             {
                 _logger.LogError(ex.Message, ex);
                 return View("Error");
-            } 
+            }
         }
 
         [Authorize(Roles = "Investigator")]
@@ -159,7 +159,7 @@ namespace Nemesys.Controllers
             {
                 _logger.LogError(ex.Message, ex);
                 return View("Error");
-            }   
+            }
         }
 
 
@@ -200,8 +200,8 @@ namespace Nemesys.Controllers
                         case "Resolved":
                             SendCloseEmail(newInvestigation.ReportId, newInvestigation.InvestigationTitle, newInvestigation.DateOfAction, newInvestigation.Outcome, newInvestigation.Feedback);
                             report.Status = "Resolved";
-                            // Retrieve the user who closed the report
-                            var user = await _userManager.GetUserAsync(User);
+                            // Retrieve the user who created the report
+                            var user = await _userManager.FindByIdAsync(report.UserId);
 
                             // Increment the user's closed reports count
                             user.ClosedReportsCount++;
@@ -257,7 +257,7 @@ namespace Nemesys.Controllers
                 _logger.LogError(ex.Message, ex);
                 return View("Error");
             }
-            
+
         }
 
         [HttpPost]
@@ -338,7 +338,7 @@ namespace Nemesys.Controllers
                 _logger.LogError(ex.Message, ex);
                 return View("Error");
             }
-            
+
         }
 
         [HttpPost]
@@ -412,7 +412,7 @@ namespace Nemesys.Controllers
                 _logger.LogError(ex.Message, ex);
                 return View("Error");
             }
-            
+
         }
 
         [Authorize(Roles = "Investigator")]
@@ -465,7 +465,7 @@ namespace Nemesys.Controllers
             {
                 _logger.LogError(ex.Message, ex);
                 return View("Error");
-            }   
+            }
         }
 
         // This method responds to GET requests and shows the confirmation page
@@ -497,7 +497,7 @@ namespace Nemesys.Controllers
                 _logger.LogError(ex.Message, ex);
                 return View("Error");
             }
-            
+
         }
 
         // This method responds to POST requests and actually deletes the investigation
@@ -531,7 +531,7 @@ namespace Nemesys.Controllers
             {
                 _logger.LogError(ex.Message, ex);
                 return View("Error");
-            }      
+            }
         }
     }
 }
