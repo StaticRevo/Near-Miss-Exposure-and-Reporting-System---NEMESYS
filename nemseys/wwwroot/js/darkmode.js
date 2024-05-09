@@ -10,6 +10,7 @@ function toggleDarkMode() {
     } else {
         // Disable dark mode
         body.classList.remove("bg-dark", "text-white");
+        body.classList.add("bg-lightgray");
         localStorage.setItem("darkModeEnabled", "false");
     }
 }
@@ -28,6 +29,7 @@ function setInitialDarkMode() {
     } else {
         themeCheckbox.checked = false;
         body.classList.remove("bg-dark", "text-white");
+        body.classList.add("bg-lightgray");
     }
 }
 
