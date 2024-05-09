@@ -39,4 +39,11 @@ body {
 .btn-circle {
     border-radius: 50%;
 }
+.dark-grey-text {
+    color: #343a40 /* Dark grey color */
+}
+.bg-lightgray {
+    background-color: #d6d4d4;
+}
+
 
