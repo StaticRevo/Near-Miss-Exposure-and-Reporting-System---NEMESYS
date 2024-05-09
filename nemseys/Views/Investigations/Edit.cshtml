@@ -9,12 +9,11 @@
 <div class="container py-2">
     <section>
         <h1 class="display-5 font-weight-bold mb-6 text-center">@Model.TitleOfReport</h1>
-        <div class="card bg-secondary">
+        <div class="card bg-secondary mb-3">
             <div class="card-body">
-                <span class="font-weight-bold mb-6 text-white" style="font-size: 15px; max-width: 600px; display: inline-block;">@Model.ReportDescription</span>
+                <span class="font-weight-bold mb-6 text-white" style="font-size: 15px; max-width: 1050px; display: inline-block;">@Model.ReportDescription</span>
             </div>
         </div>
-
 
         <!-- Report Information -->
         <div class="mb-4 text-center">
@@ -54,14 +53,17 @@
             </div>
         </div>
 
+
+        <div class="mb-4 text-center">
+            <h1 class="h1 font-weight-semibold mb-2">Location Of Report:</h1>
+        </div>
+
         <div id="map-container" class="mb-5">
             <div id="map" style="height: 400px; width: 100%;" data-location="@Model.HazardLocation"></div>
         </div>
 
         <!-- Investigation Section -->
-        <div class="mb-4 text-center">
-            <h2 class="h2 font-weight-semibold mb-2">Edit your Investigation</h2>
-        </div>
+        <h1 class="display-5 font-weight-bold mb-6 text-center">Investigation Section</h1>
 
         <form asp-action="Edit" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="All" class="text-danger"></div>
