@@ -20,7 +20,7 @@
         </div>
 
         <!-- Image and Parameters Section -->
-        <div class="row mb-5">
+        <div class="row mb-4">
             <div class="col-md-6 mb-3 mb-md-0 text-center">
                 @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
                 {
@@ -44,9 +44,14 @@
                 </p>
             </div>
         </div>
+        <!-- Hazard Location Title -->
+        <h2 class="h2 font-weight-bold mb-3 text-center">Hazard Location</h2>
+
+        <!-- Map Container -->
         <div id="map-container" class="mb-5">
             <div id="map" style="height: 400px; width: 100%;" data-location="@Model.HazardLocation"></div>
         </div>
+
         <!-- Additional Report Details -->
         <div class="card mb-4 rounded shadow">
             <div class="card-body">
