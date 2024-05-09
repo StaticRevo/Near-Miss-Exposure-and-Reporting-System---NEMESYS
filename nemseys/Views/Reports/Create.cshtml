@@ -29,10 +29,10 @@
 
                 <!-- Upload Images -->
                 <div class="mb-5">
-                    <h3 class="h4 mb-3 font-weight-semibold">Upload Images</h3>
+                    <h3 class="h4 mb-3 font-weight-semibold">Upload image</h3>
                     <div class="custom-file">
                         <input asp-for="ImageToUpload" type="file" class="custom-file-input" id="customFile">
-                        <label class="custom-file-label bg-secondary text-light" for="customFile">Attach images</label>
+                        <label class="custom-file-label bg-secondary text-light" for="customFile">Attach image</label>
                     </div>
                     <div class="image-preview-wrapper" style="margin-top: 20px;">
                         <img id="imagePreview" src="#" alt="Image Preview" style="display: none; width: 100%; height: auto; max-width: 600px; border: 1px solid #ddd; border-radius: 4px; padding: 5px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
@@ -50,7 +50,7 @@
                     <div class="form-group">
 
                         <label asp-for="HazardLocation">Location of Hazard</label>
-                        <input asp-for="HazardLocation" class="form-control" placeholder="Enter location">
+                        <input asp-for="HazardLocation" class="form-control" placeholder="Press on the location on the map">
                         <span asp-validation-for="HazardLocation" class="text-danger"></span>
                         <div id="map" style="height: 400px; width: 100%;"></div>
                     </div>
@@ -77,7 +77,6 @@
                             <option value="Resolved" disabled>Resolved</option>
                         </select>
                     </div>
-
 
                 </div>
 
