@@ -79,11 +79,10 @@
                         </p>
                         <div class="d-flex">
                             <a asp-controller="Report" asp-action="Details" asp-route-id="@report.ReportId" class="btn btn-dark text-secondary py-2 px-4 mr-2">View Report</a>
-                            @if (User.IsInRole("Investigator") && !string.Equals(report.Status.Trim(), "Resolved", StringComparison.OrdinalIgnoreCase))
+                            @if (User.IsInRole("Investigator"))
                             {
                                 <a asp-controller="Investigation" asp-action="Create" asp-route-id="@report.ReportId" class="btn btn-dark text-secondary py-2 px-4">Investigate Report</a>
                             }
-
                         </div>
                     </div>
                 </div>
@@ -201,7 +200,7 @@
                         </p>
                         <div class="d-flex">
                             <a asp-controller="Report" asp-action="Details" asp-route-id="@report.ReportId" class="btn btn-dark text-secondary py-2 px-4 mr-2">View Report</a>
-                            @if (User.IsInRole("Investigator"))
+                            @if (!report.Status.Equals("Resolved") && User.IsInRole("Investigator"))
                             {
                                 <a asp-controller="Investigation" asp-action="Create" asp-route-id="@report.ReportId" class="btn btn-dark text-secondary py-2 px-4">Investigate Report</a>
                             }
