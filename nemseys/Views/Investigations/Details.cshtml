@@ -6,104 +6,99 @@
     ViewData["Title"] = "Investigate Report";
 }
 
-<div class="container py-2">
+<div class="container py-5">
     <section>
-        <h1 class="display-5 font-weight-bold mb-6 text-center">@Model.TitleOfReport</h1>
-        <div class="card bg-secondary mb-3">
+        <!-- Report Title -->
+        <h1 class="display-4 font-weight-bold mb-4 text-center">@Model.TitleOfReport</h1>
+
+        <!-- Report Description -->
+        <div class="card bg-secondary mb-4">
             <div class="card-body">
-                <span class="font-weight-bold mb-6 text-white" style="font-size: 15px; max-width: 1050px; display: inline-block;">@Model.ReportDescription</span>
+                <p class="text-white">@Model.ReportDescription</p>
             </div>
         </div>
 
         <!-- Report Information -->
-        <div class="mb-4 text-center">
-            <h1 class="h1 font-weight-semibold mb-2">Report Information</h1>
-        </div>
-
-        <!-- Image Section -->
         <div class="row mb-4">
-            <div class="col-md-6 bg-secondary p-4 text-center mb-2 mb-md-0">
-                <img src="@Model.ImageUrl" alt="Report Image" style="width: 100%; height: 100%; object-fit: cover;" />
+            <!-- Image Section -->
+            <div class="col-md-6 mb-4 mb-md-0">
+                <div class="card bg-secondary text-white">
+                    <img src="@Model.ImageUrl" alt="Report Image" class="card-img-top" style="object-fit: cover;">
+                    <div class="card-body">
+                        <h3 class="h5 font-weight-bold mb-3">Report Parameters</h3>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item bg-dark text-white">
+                                <strong>Date Of Report:</strong> @Model.DateOfReport
+                            </li>
+                            <li class="list-group-item bg-dark text-white">
+                                <strong>Hazard Location:</strong> @Model.HazardLocation
+                            </li>
+                            <li class="list-group-item bg-dark text-white">
+                                <strong>Date and Time Spotted:</strong> @Model.DateAndTimeSpotted
+                            </li>
+                            <li class="list-group-item bg-dark text-white">
+                                <strong>Type Of Hazard:</strong> @Model.TypeOfHazard
+                            </li>
+                            <li class="list-group-item bg-dark text-white">
+                                <strong>Report Status:</strong> @Model.ReportStatus
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-6 bg-secondary p-4">
-                <h3 class="h3 font-weight-semibold mb-2">Report Parameters</h3>
-                <form>
-                    <div class="form-group mb-2">
-                        <label class="font-weight-bold">Date Of Report:</label>
-                        <input type="text" class="form-control bg-dark text-white" value="@Model.DateOfReport" readonly>
-                    </div>
-                    <div class="form-group mb-2">
-                        <label class="font-weight-bold">Hazard Location:</label>
-                        <input type="text" class="form-control bg-dark text-white" value="@Model.HazardLocation" readonly>
-                    </div>
-                    <div class="form-group mb-2">
-                        <label class="font-weight-bold">Date and Time Spotted:</label>
-                        <input type="text" class="form-control bg-dark text-white" value="@Model.DateAndTimeSpotted" readonly>
-                    </div>
-                    <div class="form-group mb-2">
-                        <label class="font-weight-bold">Type Of Hazard:</label>
-                        <input type="text" class="form-control bg-dark text-white" value="@Model.TypeOfHazard" readonly>
-                    </div>
-                    <div class="form-group mb-2">
-                        <label class="font-weight-bold">Report Status:</label>
-                        <input type="text" class="form-control bg-dark text-white" value="@Model.ReportStatus" readonly>
-                    </div>
-                </form>
+
+            <!-- Map Section -->
+            <div class="col-md-6">
+                <div id="map-container" style="height: 715px;">
+                    <div id="map" style="height: 100%; width: 100%;" data-location="@Model.HazardLocation"></div>
+                </div>
             </div>
-        </div>
-
-        <div class="mb-4 text-center">
-            <h1 class="h1 font-weight-semibold mb-2">Location Of Report:</h1>
-        </div>
-
-        <div id="map-container" class="mb-5">
-            <div id="map" style="height: 400px; width: 100%;" data-location="@Model.HazardLocation"></div>
         </div>
 
         <!-- Investigation Section -->
-        <h1 class="display-5 font-weight-bold mb-6 text-center">Investigation Section</h1>
-           
-        <form asp-action="Create" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <!-- Hidden fields -->
-            <input type="hidden" asp-for="Status" value="@Model.Status" />
-            <input type="hidden" asp-for="HazardLocation" value="@Model.HazardLocation" />
-            <input type="hidden" asp-for="TypeOfHazard" value="@Model.TypeOfHazard" />
-            <input type="hidden" asp-for="TitleOfReport" value="@Model.TitleOfReport" />
-            <input type="hidden" asp-for="ReportDescription" value="@Model.ReportDescription" />
-            <input type="hidden" asp-for="ReportStatus" value="@Model.ReportStatus" />
-            <input type="hidden" asp-for="ImageUrl" value="@Model.ImageUrl" />
-            @Html.HiddenFor(model => model.ReportId, new { @Value = Model.ReportId })
+        <div class="mb-4">
+            <h2 class="h3 font-weight-bold mb-4 text-center">Investigation Section</h2>
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="All" class="text-danger"></div>
 
-            <!-- Investigation Title -->
-            <div class="form-group mb-3">
-                <label for="investigationTitle" class="font-weight-bold">Investigation Title:</label>
-                <input type="text" id="investigationTitle" name="InvestigationTitle" class="form-control" value="@Model.InvestigationTitle" readonly>
-            </div>
+                <!-- Hidden Fields -->
+                @Html.HiddenFor(model => model.ReportId)
+                @Html.HiddenFor(model => model.Status)
+                @Html.HiddenFor(model => model.InvestigationTitle)
+                @Html.HiddenFor(model => model.DateOfAction)
+                @Html.HiddenFor(model => model.Outcome)
+                @Html.HiddenFor(model => model.Feedback)
 
-            <!-- Date of Action -->
-            <div class="form-group mb-3">
-                <label for="dateOfAction" class="font-weight-bold">Date of Action:</label>
-                <input type="date" id="dateOfAction" name="DateOfAction" class="form-control" value="@Model.DateOfAction" readonly>
-            </div>
+                <!-- Investigation Title -->
+                <div class="form-group">
+                    <label for="investigationTitle" class="font-weight-bold">Investigation Title:</label>
+                    <input type="text" id="investigationTitle" name="InvestigationTitle" class="form-control" value="@Model.InvestigationTitle" readonly>
+                </div>
 
-            <!-- Outcome -->
-            <div class="form-group mb-3">
-                <label for="outcome" class="font-weight-bold">Outcome:</label>
-                <input type="text" id="outcome" name="Outcome" class="form-control" value="@Model.Outcome" readonly>
-            </div>
+                <!-- Date of Action -->
+                <div class="form-group">
+                    <label for="dateOfAction" class="font-weight-bold">Date of Action:</label>
+                    <input type="text" id="dateOfAction" name="DateOfAction" class="form-control" value="@Model.DateOfAction" readonly>
+                </div>
 
-            <!-- Feedback -->
-            <div class="form-group mb-4">
-                <label for="feedback" class="font-weight-bold">Feedback:</label>
-                <textarea id="feedback" name="Feedback" class="form-control" rows="4" readonly>@Model.Feedback</textarea>
-            </div>
+                <!-- Outcome -->
+                <div class="form-group">
+                    <label for="outcome" class="font-weight-bold">Outcome:</label>
+                    <input type="text" id="outcome" name="Outcome" class="form-control" value="@Model.Outcome" readonly>
+                </div>
 
-            <!-- Submit Button -->
-            <div class="d-flex justify-content-center">
-                <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Back to list</a>
-            </div>
-        </form>
+                <!-- Feedback -->
+                <div class="form-group">
+                    <label for="feedback" class="font-weight-bold">Feedback:</label>
+                    <textarea id="feedback" name="Feedback" class="form-control" rows="4" readonly>@Model.Feedback</textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Back to List</a>
+                </div>
+            </form>
+        </div>
     </section>
 </div>
 
