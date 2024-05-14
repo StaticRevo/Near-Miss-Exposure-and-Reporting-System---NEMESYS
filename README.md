@@ -1,5 +1,6 @@
-#Nemesys 
-###Project by Isaac Attard and Gregory Pavia
+# Nemesys 
+### Project by Isaac Attard and Gregory Pavia
+
 Welcome to NEMESYS - the Near Miss Exposure and Reporting System designed to promote safety and prevent accidents on campus at the UOM. Have you ever spotted something dangerous on campus that could easily cause an accident or injury? Have you witnessed someone working without the necessary safety precautions? If so, NEMESYS is here to empower you to take action.
 
 Within NEMESYS, there are two distinct user roles: reporters and investigators. Reporters have the ability to create near-miss reports, edit or delete their own reports, and browse entries created by themselves and others. They can also upvote reports submitted by others. Investigators, on the other hand, are responsible for reviewing reports, adding investigations, and managing the status of each report.
