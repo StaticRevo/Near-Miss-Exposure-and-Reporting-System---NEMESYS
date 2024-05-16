@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model ConfirmEmailModel
 @{
     ViewData["Title"] = "Confirm email";
@@ -6,3 +6,6 @@
 
 <h1>@ViewData["Title"]</h1>
 <partial name="_StatusMessage" model="Model.StatusMessage" />
+
+<a href="@Url.Action("Index", "Home")" class="btn btn-primary btn-lg">Go Back Home</a>
+
