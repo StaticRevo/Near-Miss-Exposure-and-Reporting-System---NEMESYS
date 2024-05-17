@@ -276,7 +276,7 @@ namespace Nemesys.Controllers
         {
             try
             {
-                string senderEmail = "";
+                string senderEmail = "postmaster@sandbox11f745db67d64bed99778bfbc299ded4.mailgun.org";
                 string receiverEmail = "gregory.pavia.22@um.edu.mt"; // I'm sending this to my UOM account due to testing limit on emails.
                                                                      // If we had access to an SMTP server without limits we would send the email to the user that closed the report + admin too.
 
@@ -287,7 +287,7 @@ namespace Nemesys.Controllers
                 using (var client = new SmtpClient())
                 {
                     client.UseDefaultCredentials = false;
-                    client.Credentials = new NetworkCredential("", ""); //password
+                    client.Credentials = new NetworkCredential("postmaster@sandbox11f745db67d64bed99778bfbc299ded4.mailgun.org", "db518a64b2ff853531cb9c71fa2178f2-86220e6a-afcff80d"); //password
                     client.EnableSsl = true;
 
                     await client.SendMailAsync(mailMessage);
