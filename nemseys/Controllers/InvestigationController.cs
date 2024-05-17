@@ -174,16 +174,7 @@ namespace Nemesys.Controllers
                 if (ModelState.IsValid)
                 {
                     _logger.LogInformation("Model state is valid");
-                    Investigation investigation = new Investigation()
-                    {
-                        ReportId = newInvestigation.ReportId,
-                        InvestigationTitle = newInvestigation.InvestigationTitle,
-                        DateOfAction = newInvestigation.DateOfAction,
-                        Status = newInvestigation.Status,
-                        Outcome = newInvestigation.Outcome,
-                        Feedback = newInvestigation.Feedback,
-                        UserId = _userManager.GetUserId(User)
-                    };
+
                     // Retrieve the report from the database
                     var report = _nemeseysRepository.GetReportById(newInvestigation.ReportId);
 
@@ -194,12 +185,34 @@ namespace Nemesys.Controllers
                         return NotFound();
                     }
 
+                    // Check if the current user is the author of the report
+                    var currentUserId = _userManager.GetUserId(User);
+                    if (report.UserId == currentUserId)
+                    {
+                        // If the current user is the author of the report, return a BadRequest result or a custom error view
+                        ModelState.AddModelError("", "You cannot create an investigation for your own report.");
+                        return View(newInvestigation);
+                    }
+
+                    // Create a new investigation
+                    Investigation investigation = new Investigation()
+                    {
+                        ReportId = newInvestigation.ReportId,
+                        InvestigationTitle = newInvestigation.InvestigationTitle,
+                        DateOfAction = newInvestigation.DateOfAction,
+                        Status = newInvestigation.Status,
+                        Outcome = newInvestigation.Outcome,
+                        Feedback = newInvestigation.Feedback,
+                        UserId = currentUserId
+                    };
+
                     // Update the status of the report based on the status of the investigation
                     switch (investigation.Outcome)
                     {
                         case "Resolved":
                             SendCloseEmail(newInvestigation.ReportId, newInvestigation.InvestigationTitle, newInvestigation.DateOfAction, newInvestigation.Outcome, newInvestigation.Feedback);
                             report.Status = "Resolved";
+
                             // Retrieve the user who created the report
                             var user = await _userManager.FindByIdAsync(report.UserId);
 
@@ -210,12 +223,9 @@ namespace Nemesys.Controllers
                             await _userManager.UpdateAsync(user);
                             break;
                         case "Unresolved":
-                            report.Status = "Under Review";
-                            break;
                         case "Escalated":
                             report.Status = "Under Review";
                             break;
-                        // Add more cases as needed
                         default:
                             report.Status = "Unknown";
                             break;
@@ -227,6 +237,7 @@ namespace Nemesys.Controllers
                     // Persist to repository
                     _nemeseysRepository.CreateInvestigation(investigation);
                     _logger.LogInformation("Investigation created successfully");
+
                     // Set a success message in TempData
                     TempData["Message"] = "Investigation created successfully!";
                     return RedirectToAction("Index", "Home");
@@ -257,8 +268,8 @@ namespace Nemesys.Controllers
                 _logger.LogError(ex.Message, ex);
                 return View("Error");
             }
-
         }
+
 
         [HttpPost]
         public async Task<IActionResult> SendCloseEmail(int ReportId, string InvestigationTitle, System.DateTime DateOfAction, string Outcome, string Feedback)
@@ -386,7 +397,6 @@ namespace Nemesys.Controllers
                                 case "Escalated":
                                     report.Status = "Under Review";
                                     break;
-                                // Add more cases as needed
                                 default:
                                     report.Status = "Unknown";
                                     break;
